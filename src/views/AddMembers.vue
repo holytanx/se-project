@@ -72,26 +72,28 @@ export default {
   }
   ,
   methods: {
-    addMember(){
-      db.collection('users').add({
-        email : this.email,
-        dept_id: this.selected
-      })
-    }
-    ,
+  
+    
     registerAuth(){
       firebase
         .auth()
         .createUserWithEmailAndPassword(this.email, this.password)
         .then(
           user => {
-            alert("Account created for " + user.email);
+            alert("Account created for " + this.email);
             // this.$router.go({ path: this.$router.path });
           },
           err => {
             alert(err.message);
           }
         );
+    },
+    addMember(){
+      db.collection('users').add({
+        email : this.email,
+        dept_id: this.selected
+      })
+      console.log("Added successfully")
     }
   }
 };

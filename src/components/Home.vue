@@ -116,7 +116,11 @@ export default {
                 id.deptID = doc.data().dept_id
                 console.log(id.deptID)
                 if(id.deptID == 10 || parseInt(id.deptID) == 10){
-                  console.log("OK, Your admin!")
+                  console.log("OK, You're an admin!")
+                }else if (id.deptID == 14 || parseInt(id.deptID )==14){
+                  console.log("OK, You're a dean")
+                }else{
+                  console.log("OK, You're regular member")
                 }
               }
           })
