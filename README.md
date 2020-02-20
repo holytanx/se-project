@@ -1,1 +1,1 @@
-# my-project
+# SE Project
