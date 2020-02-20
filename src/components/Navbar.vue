@@ -1,7 +1,10 @@
 <template>
     <div>
       <b-navbar toggleable="lg" type="dark" variant="info">
-        <b-navbar-brand :to="{ name: 'Home' }">SE Project</b-navbar-brand>
+        <b-navbar-brand>
+                  <router-link :to="this.link">Home</router-link>
+
+        </b-navbar-brand>
 
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -20,21 +23,49 @@
 
 <script>
 import firebase from "firebase";
+import {db} from '../main'
 
 export default {
   name: "Header",
   data(){
     return {
       isLoggined: false,
-      currentUser: false
+      currentUser: false,
+      user : ''
+      ,
+      deptID : null,
+      link : ''
     };
   },
     created(){
+    
+       var id = this
       if(firebase.auth().currentUser){
         this.isLoggined = true;
         this.currentUser = firebase.auth().currentUser.email;
-      }
-    
+        this.user = this.currentUser
+   db.collection("users").get().then(function(querySnapshot){
+          querySnapshot.forEach(function(doc){
+        // doc.data() is never undefined for query doc snapshots
+              if(doc.data().email == firebase.auth().currentUser.email){
+                id.deptID = doc.data().dept_id
+                console.log(id.deptID)
+                if(id.deptID == 10 || parseInt(id.deptID) == 10){
+                  console.log("OK, You're an admin!")
+                  id.link= "/AdminDashboard"
+                }else if (id.deptID == 14 || parseInt(id.deptID )==14){
+                  console.log("OK, You're a dean")
+                  id.link= "/DeanDashboard"
+
+                }else{
+                  console.log("OK, You're regular member")
+                  id.link= "/RegularDashboard"
+  
+                }
+              }
+          })
+        })
+      }  
   },
   methods:{
     logout: function(){
@@ -42,7 +73,8 @@ export default {
             this.$router.go({ path: this.$router.path });
       });
       console.log("Logout");
-    }
+    },
+
   }
 };
 </script>
