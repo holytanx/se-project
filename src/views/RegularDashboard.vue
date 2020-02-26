@@ -1,8 +1,17 @@
 <template>
   <div class="home">
     <sidebar-menu  :menu="regularmenu"  />
+    <div>
+      <b-table striped hover :items="pp" :fields="fields" id="project_table">
+        <template v-slot:cell(index)="data">
+          {{ data.index + 1 }}
+        </template>
+        <template v-slot:cell(จัดการ)>
+          <a>รายละเอียดโครงการ</a>
+        </template>
+      </b-table>
+    </div>
   </div>
-  
 </template>
 
 <script>
@@ -10,6 +19,7 @@
 import SideBar from '../components/SideBar'
 import firebase from "firebase";
 import {db} from '../main' 
+import { counter } from '@fortawesome/fontawesome-svg-core';
 export default {
   name: 'HelloWorld',
   props: {
@@ -23,6 +33,29 @@ export default {
     //   user : ''
     //   ,
     //   deptID : null,
+      fields: [
+        {
+          key: 'index',
+          label: 'ลำดับ',
+          sortable: true
+        },
+        {
+          key: 'project_name',
+          label: 'ชื่อโครงการ',
+          sortable: true
+        },
+        {
+          key: 'person_in_charge',
+          label: 'ผู้รับผิดชอบ',
+          sortable: true
+        },
+        {
+          key: 'budget',
+          label: 'งบประมาณ',
+          sortable: true
+        },
+        'จัดการ'
+        ],
       regularmenu: [
         {
           header: true,
@@ -40,12 +73,11 @@ export default {
           icon: "fa fa-chart-area"
 
         },
-      ]
-      
-     
+      ], 
+      pp: []
     };
   },
-  created(){
+  mounted() {
 //     var id = this
 //       if(firebase.auth().currentUser){
 //         this.isLoggined = true;
@@ -68,7 +100,20 @@ export default {
 //           })
 //         })
 //             }
-   
+    console.log('ok')
+    db.collection('projects').get().then(
+     querySnapshot => {
+      //  console.log(querySnapshot)
+       querySnapshot.forEach(doc => {
+         this.pp.push(doc.data())
+         const data ={
+           'project_name' : doc.id
+         }
+         console.log(this.pp);
+         
+       })
+     }
+   )
   }
 }
 </script>
@@ -88,5 +133,8 @@ li {
 }
 a {
   color: #42b983;
+}
+#project_table{
+  text-align: left 
 }
 </style>

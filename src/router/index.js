@@ -7,6 +7,7 @@ import StrategyManagement from "../views/StrategyManagement.vue";
 import DeanDashboard from "../views/DeanDashboard"
 import AdminDashboard from "../views/AdminDashboard"
 import RegularDashboard from "../views/RegularDashboard"
+import BudgetManaget from "../views/BudgetManaget"
 import firebase from "firebase";
 import {db} from '../main';
 
@@ -66,6 +67,14 @@ const routes = [
     component: DeanDashboard,
     meta: {
       requiresAuth:true
+    }
+  },
+  {
+    path: "/BudgetManaget",
+    name: "BudgetManaget",
+    component: BudgetManaget,
+    meta: {
+      requiredAuth:true
     }
   }
 ];
