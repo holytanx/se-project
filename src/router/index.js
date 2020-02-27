@@ -5,9 +5,10 @@ import Home from "../components/Home.vue";
 import AddMembers from "../views/AddMembers.vue";
 import StrategyManagement from "../views/StrategyManagement.vue";
 import DeanDashboard from "../views/DeanDashboard"
+import DeanTotalBudget from"../views/DeanTotalBudget"
 import AdminDashboard from "../views/AdminDashboard"
 import RegularDashboard from "../views/RegularDashboard"
-import BudgetManaget from "../views/BudgetManaget.vue"
+import BudgetManaget from "../views/BudgetManaget"
 import firebase from "firebase";
 import {db} from '../main';
 
@@ -70,19 +71,30 @@ const routes = [
     }
   },
   {
-    path: "/budget-managet",
+    path: "/DeanTotalBudget",
+    name: "DeanTotalBudget",
+    component: DeanTotalBudget,
+    meta: {
+      requiresAuth:true
+    }
+  },
+  {
+    path: "/BudgetManaget",
     name: "BudgetManaget",
-    component: BudgetManaget
+    component: BudgetManaget,
+    meta: {
+      requiredAuth:true
+    }
   }
 ];
 
 const router = new VueRouter({
-  mode: 'history',
   routes
 });
 
-// Nav guards
-router.beforeEach((to, from, next) => {
+//Nav guards
+router.beforeEach(
+(to, from, next) => {
   //Check for requiredAuth guard
   if(to.matched.some(record => record.meta.requiresAuth)){
     //Check if not logged in
@@ -98,8 +110,9 @@ router.beforeEach((to, from, next) => {
       //Proceed to route
       next();
     }
-  } else if(to.matched.some(record => record.meta.requiresGuest)){
-    //Check if logged in      
+  }else if(to.matched.some(record => record.meta.requiresGuest)){
+       //Check if logged in      
+ 
     if(firebase.auth().currentUser){
       db.collection("users").get().then(function(querySnapshot){
         querySnapshot.forEach(function(doc){
@@ -134,10 +147,11 @@ router.beforeEach((to, from, next) => {
       //Proceed to route
       next();
     }
-  } else{
+  }else{
        //Proceed to route
-    next();
+       next();
   }
-})
+}
+)
 
 export default router;
