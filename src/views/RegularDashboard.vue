@@ -1,13 +1,19 @@
 <template>
   <div class="home">
-    <sidebar-menu  :menu="regularmenu"  />
+    <sidebar-menu  :menu="regularmenu"/>
+    <div id="header">
+      <h1 id="headerName">โครงการย่อย
+        <b-button variant="primary" id="addSubProject">เพิ่มโครงการ</b-button>
+      </h1>
+      
+    </div>
     <div>
       <b-table striped hover :items="pp" :fields="fields" id="project_table">
         <template v-slot:cell(index)="data">
           {{ data.index + 1 }}
         </template>
         <template v-slot:cell(จัดการ)>
-          <a>รายละเอียดโครงการ</a>
+          <router-link to="/budget-managet">รายละเอียดโครงการ</router-link>
         </template>
       </b-table>
     </div>
@@ -40,7 +46,7 @@ export default {
           sortable: true
         },
         {
-          key: 'project_name',
+          key: 'sub_name',
           label: 'ชื่อโครงการ',
           sortable: true
         },
@@ -101,7 +107,7 @@ export default {
 //         })
 //             }
     console.log('ok')
-    db.collection('projects').get().then(
+    db.collection('subprojects').get().then(
      querySnapshot => {
       //  console.log(querySnapshot)
        querySnapshot.forEach(doc => {
@@ -136,5 +142,11 @@ a {
 }
 #project_table{
   text-align: left 
+}
+#addSubProject{
+  margin-left: 75%
+}
+#header{
+  margin-block: 20px
 }
 </style>

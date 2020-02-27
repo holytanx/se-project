@@ -7,7 +7,7 @@ import StrategyManagement from "../views/StrategyManagement.vue";
 import DeanDashboard from "../views/DeanDashboard"
 import AdminDashboard from "../views/AdminDashboard"
 import RegularDashboard from "../views/RegularDashboard"
-import BudgetManaget from "../views/BudgetManaget"
+import BudgetManaget from "../views/BudgetManaget.vue"
 import firebase from "firebase";
 import {db} from '../main';
 
@@ -70,22 +70,19 @@ const routes = [
     }
   },
   {
-    path: "/BudgetManaget",
+    path: "/budget-managet",
     name: "BudgetManaget",
-    component: BudgetManaget,
-    meta: {
-      requiredAuth:true
-    }
+    component: BudgetManaget
   }
 ];
 
 const router = new VueRouter({
+  mode: 'history',
   routes
 });
 
-//Nav guards
-router.beforeEach(
-(to, from, next) => {
+// Nav guards
+router.beforeEach((to, from, next) => {
   //Check for requiredAuth guard
   if(to.matched.some(record => record.meta.requiresAuth)){
     //Check if not logged in
@@ -101,9 +98,8 @@ router.beforeEach(
       //Proceed to route
       next();
     }
-  }else if(to.matched.some(record => record.meta.requiresGuest)){
-       //Check if logged in      
- 
+  } else if(to.matched.some(record => record.meta.requiresGuest)){
+    //Check if logged in      
     if(firebase.auth().currentUser){
       db.collection("users").get().then(function(querySnapshot){
         querySnapshot.forEach(function(doc){
@@ -138,11 +134,10 @@ router.beforeEach(
       //Proceed to route
       next();
     }
-  }else{
+  } else{
        //Proceed to route
-       next();
+    next();
   }
-}
-)
+})
 
 export default router;
