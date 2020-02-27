@@ -3,10 +3,86 @@
     <sidebar-menu  :menu="regularmenu"/>
     <div id="header">
       <h1 id="headerName">โครงการย่อย
-        <b-button variant="primary" id="addSubProject">เพิ่มโครงการ</b-button>
+        <b-button v-b-modal.modal-prevent-closing variant="primary" id="addSubProject">เพิ่มโครงการ</b-button>
+        <b-button variant="danger">ลบโครงการ</b-button>
       </h1>
       
     </div>
+    <b-modal
+      id="modal-prevent-closing"
+      ref="modal"
+      title="Submit Your Project"
+      @show="resetModal"
+      @hidden="resetModal"
+      @ok="handleOk"
+    >
+      <form ref="form" @submit.stop.prevent="handleSubmit">
+        <b-form-group
+          :state="P_nameState"
+          label="ชื่อโครงการ"
+          label-for="name-input"
+          invalid-feedback="Name is required"
+        >
+          <b-form-input id="name-input" v-model="Pname" :state="P_nameState" required></b-form-input>
+        </b-form-group>
+        <b-form-group
+          :state="M_nameState"
+          label="ชื่อผู้รับผิดชอบ"
+          label-for="M_name-input"
+          invalid-feedback="Name is required"
+        >
+          <b-form-input id="M_name-input" v-model="Mname" :state="M_nameState" required></b-form-input>
+        </b-form-group>
+        <b-form-group
+          :state="budgetState"
+          label="งบประมาณ"
+          label-for="budget-input"
+          invalid-feedback="Budget is required"
+        >
+          <b-form-input id="budget-input" v-model="budget" :state="budgetState" required></b-form-input>
+        </b-form-group>
+        <b-form-group
+          :state="indicatorState"
+          label="ตัวชี้วัด"
+          label-for="indicator-input"
+          invalid-feedback="Indicator is required"
+        >
+          <b-form-input id="indicator-input" v-model="indicator" :state="indicatorState" required></b-form-input>
+        </b-form-group>
+        <b-form-group
+          :state="valueState"
+          label="ค่าเป้าหมาย(ของตัวชี้วัด)"
+          label-for="value-input"
+          invalid-feedback="Value is required"
+        >
+          <b-form-input id="value-input" v-model="value" :state="valueState" required></b-form-input>
+        </b-form-group>
+        <b-form-group
+          :state="planState"
+          label="ยุทธศาสตร์"
+          label-for="plan-input"
+          invalid-feedback="Plan is required"
+        >
+          <b-form-input id="plan-input" v-model="plan" :state="planState" required></b-form-input>
+        </b-form-group>
+        <b-form-group
+          :state="pointerState"
+          label="ประเด็นยุทธศาสตร์"
+          label-for="pointer-input"
+          invalid-feedback="Pointer is required"
+        >
+          <b-form-input id="pointer-input" v-model="pointer" :state="pointerState" required></b-form-input>
+        </b-form-group>
+        <b-form-group
+          :state="methodState"
+          label="กลยุทธ์"
+          label-for="method-input"
+          invalid-feedback="Method is required"
+        >
+          <b-form-input id="method-input" v-model="method" :state="methodState" required></b-form-input>
+        </b-form-group>
+      </form>
+    </b-modal>
     <div>
       <b-table striped hover :items="pp" :fields="fields" id="project_table">
         <template v-slot:cell(index)="data">
@@ -26,6 +102,9 @@ import SideBar from '../components/SideBar'
 import firebase from "firebase";
 import {db} from '../main' 
 import { counter } from '@fortawesome/fontawesome-svg-core';
+var pn;
+var pm;
+var b;
 export default {
   name: 'HelloWorld',
   props: {
@@ -36,9 +115,8 @@ export default {
     return {
       isLoggedin: false
       ,
-    //   user : ''
-    //   ,
-    //   deptID : null,
+      Pname: "",
+      P_nameState: null,
       fields: [
         {
           key: 'index',
@@ -82,6 +160,61 @@ export default {
       ], 
       pp: []
     };
+  },
+  methods: {
+    checkFormValidity() {
+      const valid = this.$refs.form.checkValidity();
+      this.P_nameState = valid;
+      this.M_nameState = valid;
+      this.budgetState = valid;
+      this.indicatorState = valid;
+      this.valueState = valid;
+      this.pointerState = valid;
+      this.planState = valid;
+      this.methodState = valid;
+      return valid;
+    },
+    resetModal() {
+      this.Pname = "";
+      this.P_nameState = null;
+      this.Mname = "";
+      this.M_nameState = null;
+      this.budget = "";
+      this.budgetState = null;
+      this.indicator = "";
+      this.indicatorState = null;
+      this.value = "";
+      this.valueState = null;
+      this.pointer = "";
+      this.pointerState = null;
+      this.Pname = "";
+      this.planState = null;
+      this.method = "";
+      this.methodState = null;
+    },
+    handleOk(bvModalEvt) {
+      // Prevent modal from closing
+      bvModalEvt.preventDefault();
+      // Trigger push
+      this.handlePush()
+    },
+    handlePush() {
+        // Exit when the form isn't valid
+        if (!this.checkFormValidity()) {
+          return
+        }
+        let data = {
+        sub_name: this.Pname,
+        person_in_charge: this.Mname,
+        budget: this.budget,
+        ค่าเป้าหมาย: this.value,
+        ตัวชี้วัด: this.indicator,
+        ยุทธศาสตร์: this.planState,
+        ประเด็นยุทธศาสตร์: this.pointer,
+        กลยุทธ์: this.method,
+        };
+        let setDoc = db.collection('subprojects').doc(this.Pname).set(data);
+      }
   },
   mounted() {
 //     var id = this
@@ -144,7 +277,8 @@ a {
   text-align: left 
 }
 #addSubProject{
-  margin-left: 75%
+  margin-left: 65%;
+  margin-right: 10px;
 }
 #header{
   margin-block: 20px
