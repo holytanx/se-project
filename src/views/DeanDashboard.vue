@@ -31,7 +31,7 @@ export default {
           hiddenOnCollapse: true
         },
         {
-          href: "/DeanDashboard",
+          href: "/DeanTotalBudget",
           title: "สรุปยอดงบประมาณรายปี",
           icon: "fa fa-user"
         },
