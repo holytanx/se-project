@@ -80,6 +80,14 @@
         >
           <b-form-input id="method-input" v-model="method" :state="methodState" required></b-form-input>
         </b-form-group>
+        <b-form-group
+          :state="methodState"
+          label="ปี"
+          label-for="year-input"
+          invalid-feedback="Year is required"
+        >
+          <b-form-input id="year-input" v-model="year" :state="yearState" required></b-form-input>
+        </b-form-group>
       </form>
     </b-modal>
     <div>
@@ -182,6 +190,7 @@ export default {
       this.pointerState = valid;
       this.planState = valid;
       this.methodState = valid;
+      this.yearState = valid;
       return valid;
     },
     resetModal() {
@@ -201,6 +210,8 @@ export default {
       this.planState = null;
       this.method = "";
       this.methodState = null;
+      this.year = "";
+      this.yearState = null;
     },
     handleOk(bvModalEvt) {
       // Prevent modal from closing
@@ -222,6 +233,7 @@ export default {
         ยุทธศาสตร์: this.planState,
         ประเด็นยุทธศาสตร์: this.pointer,
         กลยุทธ์: this.method,
+        year: this.year,
         };
         let setDoc = db.collection('subprojects').doc(this.Pname).set(data);
       }
