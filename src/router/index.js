@@ -126,7 +126,7 @@ router.beforeEach(
               });
             }else if (dept_ID == 14 || parseInt(dept_ID) == 14){
               next({
-                path:'/DeanDashboard',
+                path:'/DeanTotalBudget',
                 query:{
                   redirect: to.fullPath
                 }

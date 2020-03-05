@@ -147,7 +147,6 @@ export default {
         this.user = this.currentUser
    db.collection("users").get().then(function(querySnapshot){
           querySnapshot.forEach(function(doc){
-        // doc.data() is never undefined for query doc snapshots
               if(doc.data().email == firebase.auth().currentUser.email){
                 id.deptID = doc.data().dept_id
                 console.log(id.deptID)
@@ -175,7 +174,6 @@ export default {
       });
       console.log("Logout");
     },
-
   },
      watch: {
       group () {
