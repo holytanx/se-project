@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <!-- <div>
     <div class="container">
       <div class="row">
         <div class="col s12 m8 offset-m2">
@@ -25,8 +25,47 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
+  <v-container>
+  <v-row 
+  justify="center"
+  >
+    <v-col cols="6">
+  <v-form
+    ref="form"
+    v-model="valid"
+    lazy-validation
+  >
+    <v-text-field
+      v-model="email"
+      label="Email"
+      required
+    ></v-text-field>
+
+    <v-text-field
+      v-model="password"
+      type="password"
+      label="Password"
+      required
+    ></v-text-field>
+
+ 
+
+    <v-btn
+      :disabled="!valid"
+      color="success"
+      class="mr-4"
+      v-on:click="login"
+    >
+      เข้าสู่ระบบ
+    </v-btn>
+
+  </v-form>
+    </v-col>
+  </v-row>
+  </v-container>
 </template>
+
 
 <script>
 import firebase from "firebase";
@@ -35,7 +74,9 @@ export default {
   data: function() {
     return {
       email: "",
-      password: ""
+      password: "",
+      valid: true,
+
     };
   },
   methods: {

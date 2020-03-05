@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div >
     <div class="container">
       <div class="row">
-          <div class="login card-panel grey lighten-4 black-text center">
+          <div class="col">
             <h3>เพิ่มสมาชิก</h3>
-            <form  class="col s12">
+            <!-- <form  class="col s12">
                 <div class="row">
               <div class="input-field col s12">
                 <label>Email</label>
@@ -20,7 +20,6 @@
               <div>
               <b>สาขาวิชา/ฝ่าย/ตำแหน่ง</b>
                <b-form-select v-model="selected" :options="departments" class="mb-3">
-                <!-- This slot appears above the options from 'options' prop -->
                 <template v-slot:first>
                   <b-form-select-option :value="null" disabled>-- กรุณาเลือกสาขาวิชา/ฝ่าย/ตำแหน่งของสมาชิกที่ต้องการเพิ่ม --</b-form-select-option>
                 </template>
@@ -29,18 +28,43 @@
               </div>
                 <b-button @click="registerAuth()+addMember()" variant="success">เพิ่ม</b-button>
                 <b-button  variant="danger"><router-link to="/">ยกเลิก</router-link></b-button>
+            </form> -->
+            <form>
+              <v-text-field
+                v-model="email"
+                label="E-mail"
+                required
+                @input="$v.email.$touch()"
+                @blur="$v.email.$touch()"
+              ></v-text-field>
+                <v-text-field
+                v-model="password"
+                label="Password"
+                required
+                type="password"
+                @input="$v.password.$touch()"
+                @blur="$v.password.$touch()"
+              ></v-text-field>
+              <v-select
+                v-model="selected"
+                :items="items"
+                label="Item"
+                required
+                @change="$v.select.$touch()"
+                @blur="$v.select.$touch()"
+              ></v-select>
 
-            </form>
+              <v-btn class="mr-4" @click="submit">submit</v-btn>
+              <v-btn @click="clear">clear</v-btn>
+          </form>
           </div>
-         
         </div>
       </div>
-
     </div>
+    
 </template>
 
 <script>
-import SideBar from '../components/SideBar'
 
 import firebase from "firebase";
 import { db } from '../main';
@@ -75,8 +99,6 @@ export default {
   }
   ,
   methods: {
-  
-    
     registerAuth(){
       firebase
         .auth()
@@ -97,7 +119,17 @@ export default {
         dept_id: this.selected
       })
       console.log("Added successfully")
-    }
+    },
+        submit () {
+        this.$v.$touch()
+      },
+      clear () {
+        this.$v.$reset()
+        this.name = ''
+        this.email = ''
+        this.select = null
+        this.checkbox = false
+      },
   }
 };
 </script>

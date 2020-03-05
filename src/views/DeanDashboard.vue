@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <sidebar-menu  :menu="deanmenu"  />
 
   </div>
   
@@ -8,7 +7,6 @@
 
 <script>
 
-import SideBar from '../components/SideBar'
 import firebase from "firebase";
 import {db} from '../main' 
 export default {

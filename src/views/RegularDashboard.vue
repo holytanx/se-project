@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <sidebar-menu  :menu="regularmenu"/>
     <div id="header">
       <h1 id="headerName">โครงการย่อย
         <b-button v-b-modal.modal-prevent-closing variant="primary" id="addSubProject">เพิ่มโครงการ</b-button>
@@ -98,7 +97,6 @@
 
 <script>
 
-import SideBar from '../components/SideBar'
 import firebase from "firebase";
 import {db} from '../main' 
 import { counter } from '@fortawesome/fontawesome-svg-core';

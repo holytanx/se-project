@@ -1,23 +1,89 @@
 <template>
-    <div>
-      <b-navbar toggleable="lg" type="dark" variant="info">
-        <b-navbar-brand>
-                  <router-link :to="this.link">Home</router-link>
+<div>
+    <v-app-bar
+      app
+      color="indigo"
+      dark
+    >
+      <v-app-bar-nav-icon v-if="isLoggined" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
-        </b-navbar-brand>
+      <div class="d-flex align-center">
 
-        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+       <span class="mr-2 display-1 font-weight light">
+         SE-Project
+       </span>
+      </div>
 
-        <b-collapse id="nav-collapse" is-nav>
-          <!-- Right aligned nav items -->
-          <b-navbar-nav class="ml-auto">
-            <span class="email black-text" v-if="isLoggined">{{currentUser}}</span>
-            <b-button size="sm" class="my-2 my-sm-0" type="submit" v-if="!isLoggined"><router-link to="/Login">เข้าสู่ระบบ</router-link></b-button>
-            <b-button size="sm" class="my-2 my-sm-0" v-on:click="logout"  v-if="isLoggined">ออกจากระบบ</b-button>
-          </b-navbar-nav>
-        </b-collapse>
-      </b-navbar>
+      <v-spacer></v-spacer>
+
+      <v-btn
+        href=""
+        target="_blank"
+        text
+      >
+        <span class="mr-2" v-if="!isLoggined"><router-link to="/Login">เข้าสู่ระบบ</router-link></span>
+        <span class="mr-2" v-if="isLoggined" v-on:click="logout">ออกจากระบบ</span>
+        <v-icon>mdi-open-in-new</v-icon>
+      </v-btn>
+      
+    </v-app-bar>
+     <v-navigation-drawer
+        v-model="drawer"
+        :color="color"
+        width="300"
+        :expand-on-hover="expandOnHover"
+        :mini-variant="miniVariant"
+        :right="right"
+        absolute
+
+        dark
+      >
+        <v-list
+          dense
+          nav
+          class="py-0"
+        >
+        <v-list-item two-line :class="miniVariant && 'px-0'">
+
+          </v-list-item>
+          <v-divider>
+          </v-divider>
+          <div v-if="this.deptID===10 || 10 === parseInt(this.deptID)">
+          <v-list-item 
+            v-for="item in admin_items" :key="item.title" :to="item.link" >
+            <v-list-item-icon> 
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title >{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          </div>
+          <div v-if="this.deptID===14 || 14 === parseInt(this.deptID)">
+          <v-list-item 
+            v-for="item in dean_items" :key="item.title" :to="item.link" >
+            <v-list-item-icon> 
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title >{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          </div>
+                  <v-list-item two-line :class="miniVariant && 'px-0'">
+         <v-list-item-content>
+              <v-list-item-title justify="center" v-if="this.deptID==10">ยินดีต้อนรับแอดมิน (ฝ่ายแผน)</v-list-item-title>
+              <v-list-item-title justify="center" v-if="this.deptID==14">ยินดีต้อนรับคณบดี/รอง</v-list-item-title>
+              <v-list-item-title justify="center" v-if="this.deptID!=10 && this.deptID!=14 ">ยินดีต้อนรับสมาชิกทั่วไป</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+      
+          </v-list>
+
+      </v-navigation-drawer>
+      
     </div>
+    
 </template>
 
 
@@ -26,15 +92,39 @@ import firebase from "firebase";
 import {db} from '../main'
 
 export default {
-  name: "Header",
+  name: "Navbar",
   data(){
     return {
+ 
       isLoggined: false,
       currentUser: false,
-      user : ''
-      ,
+      user : '',
       deptID : null,
-      link : ''
+      link : '',
+       drawer: false,
+             group: null,
+
+        admin_items: [
+          { title: 'จัดการโครงการ (เพิ่ม/ลบ/แก้ไข)', icon: 'mdi-view-dashboard',link:"/AdminDashboard" },
+          { title: 'ประวัติย้อนหลังโครงการ', icon: 'mdi-history', link:"/" },
+          {title: 'จัดการ ยุทธ์ศาสตร์ (เพิ่ม/ลบ/แก้ไข)', icon: 'mdi-strategy', link:"/StrategyManagement"},
+          {title: "เพิ่มสมาชิก / ผู้ใช้", icon:'mdi-account-plus-outline', link:"/AddMembers"}
+        ],
+        dean_items: [
+         { title: 'สรุปยอดงบประมาณรายปี', icon: 'mdi-view-dashboard', link:"/DeanDashboard" },
+          { title: 'สรุปยอดงบประมาณแต่ละสาขารายปี', icon: 'mdi-account', link:"/" },
+          {title: 'ตรวจสอบโครงการที่กำลังดำเนินการ', icon: 'mdi-timer-sand' , link:"/"},
+
+        ],
+        regular_items: [
+          { title: 'จัดการโครงการ (เพิ่ม/ลบ/แก้ไข)', icon: 'mdi-view-dashboard' ,link:"/"},
+          { title: 'ประวัติย้อนหลังโครงการ', icon: 'mdi-history',link:"/" },
+        ],
+        color: 'indigo',
+        right: false,
+        miniVariant: false,
+        expandOnHover: true,
+        background: false,
     };
   },
     created(){
@@ -75,6 +165,11 @@ export default {
       console.log("Logout");
     },
 
-  }
+  },
+     watch: {
+      group () {
+        this.drawer = false
+      },
+     }
 };
 </script>

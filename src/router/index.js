@@ -1,7 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Login from "../views/Login.vue";
-import Home from "../components/Home.vue";
 import AddMembers from "../views/AddMembers.vue";
 import StrategyManagement from "../views/StrategyManagement.vue";
 import DeanDashboard from "../views/DeanDashboard"
