@@ -47,14 +47,14 @@
               ></v-text-field>
               <v-select
                 v-model="selected"
-                :items="items"
+                :items="departments"
                 label="Item"
                 required
                 @change="$v.select.$touch()"
                 @blur="$v.select.$touch()"
               ></v-select>
 
-              <v-btn class="mr-4" @click="submit">submit</v-btn>
+              <v-btn class="mr-4" @click="registerAuth()+addMember()">submit</v-btn>
               <v-btn @click="clear">clear</v-btn>
           </form>
           </div>

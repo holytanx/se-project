@@ -1,5 +1,5 @@
 <template>
-<div>
+  <nav>
     <v-app-bar
       app
       color="indigo"
@@ -27,7 +27,7 @@
       </v-btn>
       
     </v-app-bar>
-     <v-navigation-drawer
+     <v-navigation-drawer 
         v-model="drawer"
         :color="color"
         width="300"
@@ -35,7 +35,7 @@
         :mini-variant="miniVariant"
         :right="right"
         absolute
-
+        app
         dark
       >
         <v-list
@@ -92,9 +92,8 @@
           </v-list>
 
       </v-navigation-drawer>
-      
-    </div>
-    
+   
+      </nav>
 </template>
 
 
@@ -119,7 +118,7 @@ export default {
           { title: 'จัดการโครงการ (เพิ่ม/ลบ/แก้ไข)', icon: 'mdi-view-dashboard',link:"/AdminDashboard" },
           { title: 'ประวัติย้อนหลังโครงการ', icon: 'mdi-history', link:"/" },
           {title: 'จัดการ ยุทธ์ศาสตร์ (เพิ่ม/ลบ/แก้ไข)', icon: 'mdi-strategy', link:"/StrategyManagement"},
-          {title: "เพิ่มสมาชิก / ผู้ใช้", icon:'mdi-account-plus-outline', link:"/AddMembers"}
+          {title: "เพิ่มสมาชิก / ผู้ใช้", icon:'mdi-account-plus-outline', link:"/MembersManagement"}
         ],
         dean_items: [
          { title: 'สรุปยอดงบประมาณรายปี', icon: 'mdi-view-dashboard', link:"/DeanTotalBudget" },

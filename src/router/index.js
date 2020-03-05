@@ -8,6 +8,7 @@ import DeanTotalBudget from"../views/DeanTotalBudget"
 import AdminDashboard from "../views/AdminDashboard"
 import RegularDashboard from "../views/RegularDashboard"
 import BudgetManaget from "../views/BudgetManaget"
+import MembersManagement from "../views/MembersManagement";
 import firebase from "firebase";
 import {db} from '../main';
 
@@ -27,6 +28,14 @@ const routes = [
     component: Login,
     meta: {
       requiresGuest:true
+    }
+  },
+  {
+    path: "/MembersManagement",
+    name: "MembersManagement",
+    component: MembersManagement,
+    meta: {
+      requiresAuth:true
     }
   },
   {
