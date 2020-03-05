@@ -70,6 +70,17 @@
             </v-list-item-content>
           </v-list-item>
           </div>
+          <div v-if="this.deptID!=14 && 14 != parseInt(this.deptID) && this.deptID!=10 && 10 != parseInt(this.deptID)  ">
+          <v-list-item 
+            v-for="item in regular_items" :key="item.title" :to="item.link" >
+            <v-list-item-icon> 
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title >{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          </div>
                   <v-list-item two-line :class="miniVariant && 'px-0'">
          <v-list-item-content>
               <v-list-item-title justify="center" v-if="this.deptID==10">ยินดีต้อนรับแอดมิน (ฝ่ายแผน)</v-list-item-title>
@@ -111,13 +122,13 @@ export default {
           {title: "เพิ่มสมาชิก / ผู้ใช้", icon:'mdi-account-plus-outline', link:"/AddMembers"}
         ],
         dean_items: [
-         { title: 'สรุปยอดงบประมาณรายปี', icon: 'mdi-view-dashboard', link:"/DeanDashboard" },
+         { title: 'สรุปยอดงบประมาณรายปี', icon: 'mdi-view-dashboard', link:"/DeanTotalBudget" },
           { title: 'สรุปยอดงบประมาณแต่ละสาขารายปี', icon: 'mdi-account', link:"/" },
           {title: 'ตรวจสอบโครงการที่กำลังดำเนินการ', icon: 'mdi-timer-sand' , link:"/"},
 
         ],
         regular_items: [
-          { title: 'จัดการโครงการ (เพิ่ม/ลบ/แก้ไข)', icon: 'mdi-view-dashboard' ,link:"/"},
+          { title: 'จัดการโครงการ (เพิ่ม/ลบ/แก้ไข)', icon: 'mdi-view-dashboard' ,link:"/RegularDashboard"},
           { title: 'ประวัติย้อนหลังโครงการ', icon: 'mdi-history',link:"/" },
         ],
         color: 'indigo',

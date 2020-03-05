@@ -149,33 +149,6 @@ export default {
         },
         'จัดการ'
         ],
-       adminmenu: [
-        {
-          header: true,
-          title: "Welcome, ฝ่ายแผน (แอดมิน)",
-          hiddenOnCollapse: true
-        },
-        {
-          href: "/AdminDashboard",
-          title: "จัดการโครงการ (เพิ่ม/ลบ/แก้ไข)",
-          icon: "fa fa-user"
-        },
-        {
-          href: "/AdminDashboard",
-          title: "ประวัติย้อนหลังโครงการ",
-          icon: "fa fa-chart-area",
-        },
-        {
-          href: "/AdminDashboard",
-          title: "จัดการ ยุทธ์ศาสตร์ (เพิ่ม/ลบ/แก้ไข)",
-          icon: "fa fa-user"
-        },
-        {
-          href: "/AddMembers",
-          title: "เพิ่มสมาชิก / ผู้ใช้",
-          icon: "fa fa-user"
-        }
-      ], 
       pp: []
     };
   },
