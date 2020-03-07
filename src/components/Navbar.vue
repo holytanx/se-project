@@ -22,8 +22,8 @@
         text
       >
         <span class="mr-2" v-if="!isLoggined"><router-link to="/Login">เข้าสู่ระบบ</router-link></span>
+        <input class="mr-2" v-if="isLoggined" v-model.lazy="user">
         <span class="mr-2" v-if="isLoggined" v-on:click="logout">ออกจากระบบ</span>
-        <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
       
     </v-app-bar>
@@ -83,9 +83,9 @@
           </div>
                   <v-list-item two-line :class="miniVariant && 'px-0'">
          <v-list-item-content>
-              <v-list-item-title justify="center" v-if="this.deptID==10">ยินดีต้อนรับแอดมิน (ฝ่ายแผน)</v-list-item-title>
-              <v-list-item-title justify="center" v-if="this.deptID==14">ยินดีต้อนรับคณบดี/รอง</v-list-item-title>
-              <v-list-item-title justify="center" v-if="this.deptID!=10 && this.deptID!=14 ">ยินดีต้อนรับสมาชิกทั่วไป</v-list-item-title>
+              <v-list-item-title justify="center" v-if="this.deptID==10">ยินดีต้อนรับแอดมิน (ฝ่ายแผน) </v-list-item-title>
+              <v-list-item-title justify="center" v-if="this.deptID==14">ยินดีต้อนรับคณบดี/รอง </v-list-item-title>
+              <v-list-item-title justify="center" v-if="this.deptID!=10 && this.deptID!=14 ">ยินดีต้อนรับสมาชิกทั่วไป </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
       
@@ -115,20 +115,21 @@ export default {
              group: null,
 
         admin_items: [
-          { title: 'จัดการโครงการ (เพิ่ม/ลบ/แก้ไข)', icon: 'mdi-view-dashboard',link:"/AdminDashboard" },
+          { title: 'จัดการโครงการ (เพิ่ม/ลบ/แก้ไข)', icon: 'mdi-view-dashboard',link:"/admindashboard" },
           { title: 'ประวัติย้อนหลังโครงการ', icon: 'mdi-history', link:"/" },
-          {title: 'จัดการ ยุทธ์ศาสตร์ (เพิ่ม/ลบ/แก้ไข)', icon: 'mdi-strategy', link:"/StrategyManagement"},
-          {title: "เพิ่มสมาชิก / ผู้ใช้", icon:'mdi-account-plus-outline', link:"/MembersManagement"}
+          {title: 'จัดการ ยุทธ์ศาสตร์ (เพิ่ม/ลบ/แก้ไข)', icon: 'mdi-strategy', link:"/strategymanagement"},
+          {title: "เพิ่มสมาชิก / ผู้ใช้", icon:'mdi-account-plus-outline', link:"/membersmanagement"}
         ],
         dean_items: [
-         { title: 'สรุปยอดงบประมาณรายปี', icon: 'mdi-view-dashboard', link:"/DeanTotalBudget" },
+         { title: 'สรุปยอดงบประมาณรายปี', icon: 'mdi-view-dashboard', link:"/deantotalbudget" },
           { title: 'สรุปยอดงบประมาณแต่ละสาขารายปี', icon: 'mdi-account', link:"/" },
           {title: 'ตรวจสอบโครงการที่กำลังดำเนินการ', icon: 'mdi-timer-sand' , link:"/"},
 
         ],
         regular_items: [
-          { title: 'จัดการโครงการ (เพิ่ม/ลบ/แก้ไข)', icon: 'mdi-view-dashboard' ,link:"/RegularDashboard"},
-          { title: 'ประวัติย้อนหลังโครงการ', icon: 'mdi-history',link:"/" },
+          { title: 'หน้าหลัก', icon: 'mdi-view-dashboard' ,link:"/regulardashboard"},
+          { title: 'จัดการโครงการ (เพิ่ม/ลบ/แก้ไข)', icon: 'mdi-layers-search' ,link:"/subprojectmanagement"},
+          { title: 'ประวัติย้อนหลังโครงการ', icon: 'mdi-history',link:"/subprojecthistory" },
         ],
         color: 'indigo',
         right: false,
@@ -144,7 +145,7 @@ export default {
         this.isLoggined = true;
         this.currentUser = firebase.auth().currentUser.email;
         this.user = this.currentUser
-   db.collection("users").get().then(function(querySnapshot){
+        db.collection("users").get().then(function(querySnapshot){
           querySnapshot.forEach(function(doc){
               if(doc.data().email == firebase.auth().currentUser.email){
                 id.deptID = doc.data().dept_id

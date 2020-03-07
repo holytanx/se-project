@@ -9,21 +9,16 @@ import AdminDashboard from "../views/AdminDashboard"
 import RegularDashboard from "../views/RegularDashboard"
 import BudgetManaget from "../views/BudgetManaget"
 import MembersManagement from "../views/MembersManagement";
+import SubprojectManagement from '@/views/SubprojectManagement';
+import SubprojectHistory from '@/views/SubprojectHistory';
 import firebase from "firebase";
 import {db} from '../main';
 
 Vue.use(VueRouter);
 const routes = [
-  // {
-  //   path: "/",
-  //   name: "Home",
-  //   component: Home,
-  //   meta: {
-  //     requiresAuth:true
-  //   }
-  // },
+
   {
-    path: "/Login",
+    path: "/login",
     name: "Login",
     component: Login,
     meta: {
@@ -31,7 +26,7 @@ const routes = [
     }
   },
   {
-    path: "/MembersManagement",
+    path: "/membersmanagement",
     name: "MembersManagement",
     component: MembersManagement,
     meta: {
@@ -39,7 +34,7 @@ const routes = [
     }
   },
   {
-    path: "/AddMembers",
+    path: "/addmembers",
     name: "AddMembers",
     component: AddMembers,
     meta: {
@@ -47,7 +42,7 @@ const routes = [
     }
   },
   {
-    path: "/StrategyManagement",
+    path: "/strategymanagement",
     name: "StrategyManagement",
     component: StrategyManagement,
     meta: {
@@ -55,7 +50,7 @@ const routes = [
     }
   },
   {
-    path: "/AdminDashboard",
+    path: "/admindashboard",
     name: "AdminDashboard",
     component: AdminDashboard,
     meta: {
@@ -63,7 +58,7 @@ const routes = [
     }
   },
   {
-    path: "/RegularDashboard",
+    path: "/regulardashboard",
     name: "RegularDashboard",
     component: RegularDashboard,
     meta: {
@@ -71,7 +66,23 @@ const routes = [
     }
   },
   {
-    path: "/DeanDashboard",
+    path: "/subprojectmanagement",
+    name: "SubprojectManagement",
+    component: SubprojectManagement,
+    meta: {
+      requiresAuth:true
+    }
+  },
+  {
+    path: "/subprojecthistory",
+    name: "SubprojectHistory",
+    component: SubprojectHistory,
+    meta: {
+      requiresAuth:true
+    }
+  },
+  {
+    path: "/deandashboard",
     name: "DeanDashboard",
     component: DeanDashboard,
     meta: {
@@ -79,7 +90,7 @@ const routes = [
     }
   },
   {
-    path: "/DeanTotalBudget",
+    path: "/deantotalbudget",
     name: "DeanTotalBudget",
     component: DeanTotalBudget,
     meta: {
@@ -87,7 +98,7 @@ const routes = [
     }
   },
   {
-    path: "/BudgetManaget",
+    path: "/budgetmanaget",
     name: "BudgetManaget",
     component: BudgetManaget,
     meta: {
@@ -109,7 +120,7 @@ router.beforeEach(
     if(!firebase.auth().currentUser){
       //Go to login page
       next({
-        path:'/Login',
+        path:'/login',
         query:{
           redirect: to.fullPath
         }
@@ -128,21 +139,21 @@ router.beforeEach(
             var dept_ID = doc.data().dept_id
             if(dept_ID == 10 || parseInt(dept_ID) == 10){
               next({
-                path:'/AdminDashboard',
+                path:'/admindashboard',
                 query:{
                   redirect: to.fullPath
                 }
               });
             }else if (dept_ID == 14 || parseInt(dept_ID) == 14){
               next({
-                path:'/DeanTotalBudget',
+                path:'/deantotalbudget',
                 query:{
                   redirect: to.fullPath
                 }
               });
             }else{
               next({
-                path:'/RegularDashboard',
+                path:'/regulardashboard',
                 query:{
                   redirect: to.fullPath
                 }

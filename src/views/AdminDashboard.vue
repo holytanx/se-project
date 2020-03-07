@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <div id="header">
-      <h1 id="headerName">โครงการย่อย
+      <h1 id="headerName">โครงการหลัก
         <b-button v-b-modal.modal-prevent-closing variant="primary" id="addSubProject">เพิ่มโครงการ</b-button>
         <b-button variant="danger">ลบโครงการ</b-button>
       </h1>
@@ -212,32 +212,9 @@ export default {
       }
   },
   mounted() {
-//     var id = this
-//       if(firebase.auth().currentUser){
-//         this.isLoggined = true;
-//         this.currentUser = firebase.auth().currentUser.email;
-//         this.user = this.currentUser
-//    db.collection("users").get().then(function(querySnapshot){
-//           querySnapshot.forEach(function(doc){
-//         // doc.data() is never undefined for query doc snapshots
-//               if(doc.data().email == firebase.auth().currentUser.email){
-//                 id.deptID = doc.data().dept_id
-//                 console.log(id.deptID)
-//                 if(id.deptID == 10 || parseInt(id.deptID) == 10){
-//                   console.log("OK, You're an admin!")
-//                 }else if (id.deptID == 14 || parseInt(id.deptID )==14){
-//                   console.log("OK, You're a dean")
-//                 }else{
-//                   console.log("OK, You're regular member")
-//                 }
-//               }
-//           })
-//         })
-//             }
     console.log('ok')
-    db.collection('subprojects').get().then(
+    db.collection('projects').get().then(
      querySnapshot => {
-      //  console.log(querySnapshot)
        querySnapshot.forEach(doc => {
          this.pp.push(doc.data())
          const data ={
