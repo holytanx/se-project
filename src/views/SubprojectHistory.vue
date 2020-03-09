@@ -84,21 +84,11 @@ import { counter } from '@fortawesome/fontawesome-svg-core';
 
     watch: {
       enabled() {
-              var year_id = this.enabled
-          console.log("enabled: ",year_id)
-            //find year match with year_id
-            function getYear(item){
-                let y = Object.fromEntries(Object.entries(item).map(([key,value]) => [key,value]))
-                if(y.value == year_id){
-                    return y
-                }
-            }
-            var year = this.years.filter(getYear)[0]
-            console.log("year id: ", year.value, "and year:", year.text)
-            // find project match with year
+          var year_id = this.enabled
+          console.log("enabled: ",year_id.toString())
             function getProjects(item){
             let i = Object.fromEntries(Object.entries(item).map(([key,value])=> [key,value]))
-            if(i.year == year.text){
+            if(i.year == year_id){
               console.log("I can get one")
               return i
             }
@@ -108,6 +98,16 @@ import { counter } from '@fortawesome/fontawesome-svg-core';
         }
       },
     methods: {
+            initialize() {
+        var d = new Date();
+        var old = d.getFullYear()+543-23;
+        var now = d.getFullYear()+543;
+        var diff = now - old;
+
+        for (var i = old ; i < now ; i++){
+          this.years.push(i)
+        }
+       },
       isEnabled (slot) {
         return this.enabled === slot
       },
@@ -275,17 +275,8 @@ import { counter } from '@fortawesome/fontawesome-svg-core';
       }
   },
   created(){
-      db.collection('archives').get().then(
-          querySnapshot =>{
-              querySnapshot.forEach(doc=>{
-                  this.years.push({
-                      ...doc.data(),
-                      'text': doc.data().year,
-                      'value': doc.id
-                  })
-              })
-          }
-      )
+          this.initialize()
+
   }
     }
   

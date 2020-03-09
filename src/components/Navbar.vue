@@ -22,7 +22,8 @@
         text
       >
         <span class="mr-2" v-if="!isLoggined"><router-link to="/Login">เข้าสู่ระบบ</router-link></span>
-        <span class="mr-2" v-if="isLoggined">{{this.name}}({{this.user}})</span>
+        <span class="mr-2" v-if="isLoggined">{{this.username}}<span>({{this.user}})</span></span>
+
         <!-- <p class="mr-2" v-if="isLoggined">{{this.name}}</p>
         <p class="mr-2" v-if="isLoggined">{{this.user}}<p> -->
 
@@ -88,7 +89,7 @@
          <v-list-item-content>
               <v-list-item-title justify="center" v-if="this.deptID==10">ยินดีต้อนรับแอดมิน (ฝ่ายแผน) </v-list-item-title>
               <v-list-item-title justify="center" v-if="this.deptID==14">ยินดีต้อนรับคณบดี/รอง </v-list-item-title>
-              <v-list-item-title justify="center" v-if="this.deptID!=10 && this.deptID!=14 ">ยินดีต้อนรับสมาชิกทั่วไป </v-list-item-title>
+              <v-list-item-title justify="center" v-if="this.deptID!=10 && this.deptID!=14 ">ยินดีต้อนรับสมาชิกทั่วไป ({{filterdeptName(deptID)}})</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
       
@@ -108,11 +109,11 @@ export default {
   name: "Navbar",
   data(){
     return {
- 
+      dept: '',
       isLoggined: false,
       currentUser: false,
       user : '',
-      name: '',
+      username: '',
       deptID : null,
       link : '',
        drawer: false,
@@ -156,8 +157,8 @@ export default {
           querySnapshot.forEach(function(doc){
               if(doc.data().email == firebase.auth().currentUser.email){
                 id.deptID = doc.data().dept_id
-                console.log(doc.data().name)
-                id.name = doc.data().name
+                console.log("name", doc.data().name)
+                id.username = doc.data().name
                 console.log(id.deptID)
                 if(id.deptID == 10 || parseInt(id.deptID) == 10){
                   console.log("OK, You're an admin!")
@@ -177,6 +178,31 @@ export default {
       }  
   },
   methods:{
+            filterdeptName(project){
+          if(project == '0'  || parseInt(project) == 0){
+            return "EE"
+          }else if(project == '1'  || parseInt(project) == 1){
+            return 'CE'
+          }
+          else if(project == '2'  || parseInt(project) == 2){
+            return 'AE'
+          }
+          else if(project == '3'  || parseInt(project) == 3){
+            return 'IE'
+          }
+          else if(project == '4'  || parseInt(project) == 4){
+            return 'ME'
+          }
+          else if(project == '5'  || parseInt(project) == 5){
+            return 'ENVI'
+          }
+          else if(project == '6'  || parseInt(project) == 6){
+            return 'CHEM'
+          }
+          else if(project == '7' || parseInt(project) == 7 ){
+            return 'COE'
+          }
+            },
     logout: function(){
       firebase.auth().signOut().then(() => {
             this.$router.go({ path: this.$router.path });
