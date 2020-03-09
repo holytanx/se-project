@@ -22,7 +22,10 @@
         text
       >
         <span class="mr-2" v-if="!isLoggined"><router-link to="/Login">เข้าสู่ระบบ</router-link></span>
-        <input class="mr-2" v-if="isLoggined" v-model.lazy="user">
+        <span class="mr-2" v-if="isLoggined">{{this.name}}({{this.user}})</span>
+        <!-- <p class="mr-2" v-if="isLoggined">{{this.name}}</p>
+        <p class="mr-2" v-if="isLoggined">{{this.user}}<p> -->
+
         <span class="mr-2" v-if="isLoggined" v-on:click="logout">ออกจากระบบ</span>
       </v-btn>
       
@@ -109,6 +112,7 @@ export default {
       isLoggined: false,
       currentUser: false,
       user : '',
+      name: '',
       deptID : null,
       link : '',
        drawer: false,
@@ -116,9 +120,10 @@ export default {
 
         admin_items: [
           { title: 'จัดการโครงการ (เพิ่ม/ลบ/แก้ไข)', icon: 'mdi-view-dashboard',link:"/admindashboard" },
-          { title: 'ประวัติย้อนหลังโครงการ', icon: 'mdi-history', link:"/" },
+          { title: 'ประวัติย้อนหลังโครงการ', icon: 'mdi-history', link:"/projecthistory" },
           {title: 'จัดการ ยุทธ์ศาสตร์ (เพิ่ม/ลบ/แก้ไข)', icon: 'mdi-strategy', link:"/strategymanagement"},
-          {title: "เพิ่มสมาชิก / ผู้ใช้", icon:'mdi-account-plus-outline', link:"/membersmanagement"}
+          {title: "จัดการสมาชิก / ผู้ใช้", icon:'mdi-account-plus-outline', link:"/membersmanagement"},
+          { title: 'ประวัติการทำรายการ', icon: 'mdi-clipboard-list-outline',link:"/activities" },         
         ],
         dean_items: [
          { title: 'สรุปยอดงบประมาณรายปี', icon: 'mdi-view-dashboard', link:"/deantotalbudget" },
@@ -130,6 +135,8 @@ export default {
           { title: 'หน้าหลัก', icon: 'mdi-view-dashboard' ,link:"/regulardashboard"},
           { title: 'จัดการโครงการ (เพิ่ม/ลบ/แก้ไข)', icon: 'mdi-layers-search' ,link:"/subprojectmanagement"},
           { title: 'ประวัติย้อนหลังโครงการ', icon: 'mdi-history',link:"/subprojecthistory" },
+           { title: 'ประวัติการทำรายการ', icon: 'mdi-clipboard-list-outline',link:"/activities" },
+         
         ],
         color: 'indigo',
         right: false,
@@ -149,6 +156,8 @@ export default {
           querySnapshot.forEach(function(doc){
               if(doc.data().email == firebase.auth().currentUser.email){
                 id.deptID = doc.data().dept_id
+                console.log(doc.data().name)
+                id.name = doc.data().name
                 console.log(id.deptID)
                 if(id.deptID == 10 || parseInt(id.deptID) == 10){
                   console.log("OK, You're an admin!")

@@ -411,7 +411,6 @@ export default {
       add_target:'',
       add_person_in_charge:'',
       add_budget:null,
-      
       add_budget_remain:null,
       add_note:'',
       add_result:'',
