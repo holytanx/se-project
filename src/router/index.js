@@ -9,6 +9,7 @@ import AdminDashboard from "../views/AdminDashboard"
 import RegularDashboard from "../views/RegularDashboard"
 import BudgetManaget from "../views/BudgetManaget"
 import MembersManagement from "../views/MembersManagement";
+import SumEachyear from "../views/SumEachyear";
 import SubprojectManagement from '@/views/SubprojectManagement';
 import SubprojectHistory from '@/views/SubprojectHistory';
 import Activities from '@/views/Activities'; 
@@ -119,6 +120,15 @@ const routes = [
     path: "/budgetmanaget",
     name: "BudgetManaget",
     component: BudgetManaget,
+    meta: {
+      requiredAuth:true
+    }
+  }
+  ,
+  {
+    path: "/sumeachyear",
+    name: "SumEachyear",
+    component: SumEachyear,
     meta: {
       requiredAuth:true
     }

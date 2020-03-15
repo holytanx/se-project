@@ -238,7 +238,7 @@ export default {
         {
           title: "สรุปยอดงบประมาณแต่ละสาขารายปี",
           icon: "mdi-account",
-          link: "/"
+          link: "/sumeachyear"
         },
         {
           title: "ตรวจสอบโครงการที่กำลังดำเนินการ",
