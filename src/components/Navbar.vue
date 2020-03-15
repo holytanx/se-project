@@ -1,6 +1,16 @@
 <template>
   <nav>
-    <v-app-bar app absolute color="#418081" dark> 
+    <v-app-bar
+      v-if="!isLoggined"
+      app
+      absolute
+      color="#c43926"
+      dark
+      :collapse="!true"
+      :collapse-on-scroll="true"
+      scroll-target="#scrolling-techniques-6"
+      scroll-threshold="300"
+    >
       <v-toolbar-title>
         <div class="d-flex align-center">
           <span class="mr-2 display-1 font-weight light">
@@ -13,26 +23,27 @@
         <span class="mr-2" v-if="!isLoggined"
           ><router-link tag="h6" to="/Login"
             >เข้าสู่ระบบ <v-icon>mdi-account</v-icon></router-link
-          ></span>
+          ></span
+        >
       </v-btn>
     </v-app-bar>
     <v-app-bar
       v-if="isLoggined"
       app
       absolute
-      color="#43a047"
+      color="#c43926"
       dark
       shrink-on-scroll
       prominent
       src="https://picsum.photos/1920/1080?random"
       fade-img-on-scroll
       scroll-target="#scrolling-techniques-5"
-      scroll-threshold="100"
+      scroll-threshold="300"
     >
       <template v-slot:img="{ props }">
         <v-img
           v-bind="props"
-          gradient="to top right, rgba(55,236,186,.7), rgba(25,32,72,.7)"
+          gradient="to top right, rgba(254,108,97,.6), rgba(196,57,38,.9)"
         ></v-img>
       </template>
 
@@ -44,6 +55,12 @@
         <div class="d-flex align-center">
           <span class="mr-2 display-1 font-weight light">
             Budget Management
+            <v-btn v-if="this.deptID === 10 || 10 === parseInt(this.deptID)" id="adminBT" rounded dark
+              >ADMIN <v-icon dark right>mdi-checkbox-marked-circle</v-icon></v-btn
+            >
+            <v-btn v-if="this.deptID === 14 || 14 === parseInt(this.deptID)" id="adminBT" rounded dark
+              >DEAN <v-icon dark right>mdi-checkbox-marked-circle</v-icon></v-btn
+            >
           </span>
         </div></v-toolbar-title
       >
@@ -52,10 +69,8 @@
 
       <v-btn href="" target="_blank" text>
         <span class="mr-2" v-if="!isLoggined"
-          ><router-link tag="h6" to="/Login"
-            >เข้าสู่ระบบ</router-link
-          ></span>
-
+          ><router-link tag="h6" to="/Login">เข้าสู่ระบบ</router-link></span
+        >
 
         <span class="mr-2" v-if="isLoggined"
           >{{ this.username }}<span>({{ this.user }})</span></span
@@ -69,6 +84,7 @@
         >
       </v-btn>
     </v-app-bar>
+
     <v-navigation-drawer
       v-model="drawer"
       :color="color"
@@ -78,16 +94,24 @@
       :right="right"
       app
       dark
-      temporary
     >
       <v-list dense nav class="py-0">
-        <v-list-item two-line :class="miniVariant && 'px-0'"> </v-list-item>
-  
-            <v-list-tile-content>
-              <v-list-tile-title>Engineering KKU</v-list-tile-title>
-            </v-list-tile-content>
-  
-        <v-divider> </v-divider>
+        <v-list-item two-line :class="miniVariant && 'px-2'">
+          <v-list-item-avatar>
+            <img
+              src="https://upload.wikimedia.org/wikipedia/th/a/a6/Engineering_KKU_Thai_Emblem.png"
+            />
+          </v-list-item-avatar>
+
+          <v-list-item link>
+            <v-list-item-content>
+              <v-list-item-title class="title">EN KKU</v-list-item-title>
+              <v-list-item-subtitle>Engineering KKU</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item>
+
+        <v-divider></v-divider>
         <div v-if="this.deptID === 10 || 10 === parseInt(this.deptID)">
           <v-list-item
             v-for="item in admin_items"
@@ -158,7 +182,6 @@
       </v-list>
     </v-navigation-drawer>
   </nav>
- 
 </template>
 
 <script>
@@ -245,7 +268,7 @@ export default {
           link: "/activities"
         }
       ],
-      color: "#418081",
+      color: "#c43926",
       right: false,
       miniVariant: false,
       expandOnHover: true,
@@ -319,3 +342,14 @@ export default {
   }
 };
 </script>
+
+<style>
+#adminBT {
+  background-image: linear-gradient(
+    to right,
+    #f46b45 0%,
+    #eea849 51%,
+    #f46b45 100%
+  );
+}
+</style>
