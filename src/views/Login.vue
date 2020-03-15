@@ -1,39 +1,42 @@
 <template>
-  <v-sheet id="scrolling-techniques-6" class="overflow-y-auto" max-height="600">
-    <v-container style="height: 1200px;">
-      <v-card class="mx-auto" max-width="600">
-        <v-container fluid>
-          <v-row justify="space-around">
-            <v-col cols="8">
-              <v-form ref="form" v-model="valid" lazy-validation>
-                <v-text-field
-                  v-model="email"
-                  label="Email"
-                  required
-                ></v-text-field>
+  <v-card class="mt-4 mx-auto" max-width="460">
+    <v-sheet
+      class="v-sheet--offset mx-auto"
+      color="#c43926"
+      elevation="6"
+      max-width="calc(100% - 80%)"
+      style="height: 90px;"
+    >
+      <v-icon class="mt-7 mx-7" large color="white">mdi-account</v-icon>
+    </v-sheet>
+    <div class="title font-weight-bold">User Registration</div>
 
-                <v-text-field
-                  v-model="password"
-                  type="password"
-                  label="Password"
-                  required
-                ></v-text-field>
+    <v-container fluid>
+      <v-row justify="space-around">
+        <v-col cols="8">
+          <v-form ref="form" v-model="valid" lazy-validation>
+            <v-text-field v-model="email" label="Email" required></v-text-field>
 
-                <v-btn
-                  :disabled="!valid"
-                  color="#c43926"
-                  class="mr-4 white--text"
-                  v-on:click="login"
-                >
-                  เข้าสู่ระบบ
-                </v-btn>
-              </v-form>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-card>
+            <v-text-field
+              v-model="password"
+              type="password"
+              label="Password"
+              required
+            ></v-text-field>
+
+            <v-btn
+              :disabled="!valid"
+              color="#c43926"
+              class="mr-4 white--text"
+              v-on:click="login"
+            >
+              เข้าสู่ระบบ
+            </v-btn>
+          </v-form>
+        </v-col>
+      </v-row>
     </v-container>
-  </v-sheet>
+  </v-card>
 </template>
 
 <script>
@@ -68,3 +71,10 @@ export default {
 </script>
 
 <style lang="scss" scoped></style>
+<style>
+.v-sheet--offset {
+  top: 30px;
+  right: 230px;
+  position: relative;
+}
+</style>
