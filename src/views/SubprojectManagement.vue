@@ -778,36 +778,55 @@ export default {
         .catch(function(error) {
           console.error("Error adding document: ", error);
         });
-    },
-    deposit_budget() {
-      console.log(this.selected_finish_project);
-      console.log(this.selected_deposit_project);
-      console.log(this.deposit_amount);
-      var deposit_amount = parseInt(this.deposit_amount);
-      var finish_project_id = this.selected_finish_project[0];
-      var finish_project_budget = this.selected_finish_project[1];
-      var target_project_id = this.selected_deposit_project;
-      var target_project = this.projects.filter(function(project) {
-        return project.id == target_project_id;
-      });
-      //update target project budget
-      console.log(typeof target_project[0].budget);
-      console.log(typeof target_project[0].budget_remain);
-      console.log(typeof deposit_amount);
-      db.collection("projects")
-        .doc(target_project_id)
-        .update({
-          budget_remain: target_project[0].budget_remain + deposit_amount,
-          deposit: target_project[0].deposit + deposit_amount
+
+        //add to action history
+        db.collection('action_activities').add({
+            sub_project: this.add_sub_name,
+            type: 'เพิ่ม',
+            user: firebase.auth().currentUser
+        })
+        .then(function(docRef) {
+            console.log("เก็บเข้าประวัติแล้ว ID: ", docRef.id);
+        })
+        .catch(function(error) {
+            console.error("Error adding document: ", error);
         });
-      db.collection("projects")
-        .doc(finish_project_id)
-        .update({
-          budget_remain: parseInt(finish_project_budget) - deposit_amount,
-          withdraw: firebase.firestore.FieldValue.increment(deposit_amount)
-        });
-      this.dialog_deposit = false;
-    }
+      },
+      deposit_budget(){
+        console.log(this.selected_finish_project)
+        console.log(this.selected_deposit_project)
+        console.log(this.deposit_amount)
+        var deposit_amount = parseInt(this.deposit_amount)
+        var finish_project_id = this.selected_finish_project[0]
+        var finish_project_budget =this.selected_finish_project[1]
+        var target_project_id = this.selected_deposit_project
+        var target_project = this.projects.filter(function(project){
+          return project.id == target_project_id
+        })
+        //update target project budget 
+        console.log(typeof target_project[0].budget)
+        console.log(typeof target_project[0].budget_remain)
+        console.log(typeof deposit_amount)
+        db.collection("projects").doc(target_project_id).update({
+          budget_remain: target_project[0].budget_remain+deposit_amount,
+          deposit: target_project[0].deposit+deposit_amount
+
+        })
+        db.collection("projects").doc(finish_project_id).update({
+          budget_remain: parseInt(finish_project_budget)-deposit_amount,
+          withdraw:firebase.firestore.FieldValue.increment(deposit_amount)
+
+        })
+        db.collection("action_activities").add({
+          amount: deposit_amount,
+          from_project: finish_project_id,
+          to_project: target_project_id,
+          user: firebase.auth().currentUser,
+          time: Date.now()
+        })     
+        console.log('add to action_activities'+ deposit_amount + finish_project_id + target_project_id)
+        this.dialog_deposit = false
+      }
   },
   mounted() {
     var id = this;

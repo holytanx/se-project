@@ -7,7 +7,6 @@ import DeanDashboard from "../views/DeanDashboard"
 import DeanTotalBudget from"../views/DeanTotalBudget"
 import AdminDashboard from "../views/AdminDashboard"
 import RegularDashboard from "../views/RegularDashboard"
-import BudgetManaget from "../views/BudgetManaget"
 import MembersManagement from "../views/MembersManagement";
 import SumEachyear from "../views/SumEachyear";
 import SubprojectManagement from '@/views/SubprojectManagement';
@@ -114,14 +113,6 @@ const routes = [
     component: DeanTotalBudget,
     meta: {
       requiresAuth:true
-    }
-  },
-  {
-    path: "/budgetmanaget",
-    name: "BudgetManaget",
-    component: BudgetManaget,
-    meta: {
-      requiredAuth:true
     }
   }
   ,
