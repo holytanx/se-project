@@ -1,6 +1,35 @@
 
 <template>
   <v-container class="grey lighten-5">
+    <v-dialog
+        v-model="view" persistent max-width="600px"
+        >
+        <v-card>
+          <v-card-title>
+            <span class="headline">โครงการย่อย</span>
+          </v-card-title>
+          <v-data-table
+          :headers="sub_headers"
+          :items="sub_project"
+          sort-by="calories"
+          class="elevation-1"
+        >
+          <template v-slot:top>
+            <v-toolbar flat color="white">
+              <v-spacer></v-spacer>
+            </v-toolbar>
+          </template>
+          <template v-slot:no-data>
+            <!-- <v-btn color="primary" @click="initialize">Reset</v-btn> -->
+          </template>
+        </v-data-table>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="red" text @click="view = false">EXIT</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
  <v-dialog v-model="dialog_edit" persistent max-width="600px">
       <v-card>
         <v-card-title>
@@ -169,6 +198,7 @@
       <v-chip :color="getColor(item.deptname)" dark>{{ item.deptname }}</v-chip>
     </template>
     <template v-slot:item.action="{ item }">
+
             <v-icon
         small
         class="mr-2"
@@ -209,7 +239,15 @@ import { counter } from '@fortawesome/fontawesome-svg-core';
     data: () => ({
       search: '',
       projects:[],
-      sub_project: [],
+      sub_project:[],
+      ae_subproject: [],
+      ce_subproject: [],
+      che_subproject: [],
+      coe_subproject: [],
+      ee_subproject: [],
+      env_subproject: [],
+      ie_subproject: [],
+      me_subproject: [],
       departments:[],
       tactics:[],
       strategic:[],
@@ -217,6 +255,7 @@ import { counter } from '@fortawesome/fontawesome-svg-core';
       years:[],
       dialog: false,
       dialog_edit: false,
+      view: false,
       add_project_name: '',
       add_dept_id:'',
       add_si_id: '',
@@ -241,7 +280,7 @@ import { counter } from '@fortawesome/fontawesome-svg-core';
             sortable: false,
             value: 'deptname',
           },
-          { text: 'ประเด็นยุทธ์ศาสตร์', value: 'project_name' },
+          { text: 'ชื่อโครงการ', value: 'project_name' },
 
           { text: 'ประเด็นยุทธ์ศาสตร์', value: 'si_id' },
           { text: 'ยุทธศาสตร์', value: 's_id' },
@@ -252,6 +291,18 @@ import { counter } from '@fortawesome/fontawesome-svg-core';
           { text: 'โอนเข้า', value: 'deposit' },
           { text: 'โอนออก', value: 'withdraw' },
           { text: 'รายละเอียด', value: 'action', sortable: false },
+          // {text: 'สถานะ' , value: 'isFinish'}
+        ],
+        sub_headers: [
+          { text: 'ชื่อโครงการย่อย', value: 'sub_name' },
+          { text: 'ประเด็นยุทธ์ศาสตร์', value: 'si_id' },
+          { text: 'ยุทธศาสตร์', value: 's_id' },
+          { text: 'กลยุทธ์', value: 't_id' },
+          { text: 'ตัวชี้วัด', value: 'indicator' },
+          { text: 'กลุ่มเป้าหมาย', value: 'target' },
+          { text: 'ผู้รับผิดชอบ', value: 'person_in_charge' },
+          { text: 'งบประมาณ', value: 'budget' },
+          { text: 'คงเหลือ', value: 'budget_remain' },
           // {text: 'สถานะ' , value: 'isFinish'}
         ],
       editedIndex: -1,
@@ -273,6 +324,7 @@ import { counter } from '@fortawesome/fontawesome-svg-core';
           budget: null,
           budget_remain: null
       },
+      
     }),
 
     computed: {
@@ -288,7 +340,7 @@ import { counter } from '@fortawesome/fontawesome-svg-core';
     // },
 
     created () {
-        db.collection('strategicissues').get().then(
+    db.collection('strategicissues').get().then(
       querySnapshot => {
         querySnapshot.forEach(doc => {
           const data ={
@@ -342,22 +394,42 @@ import { counter } from '@fortawesome/fontawesome-svg-core';
       querySnapshot => {
         querySnapshot.forEach(doc => {
           if(doc.data().isFinish == false){
-          var filteredDept = this.filterdeptName(doc.data().dept_id)
+          var filteredDept = this.filterdeptName(doc.data().dept_id);
+          var subfilteredDept = this.sub_filterdeptName(doc.data().dept_id);
+          console.log(subfilteredDept)
           console.log(filteredDept)
           const data ={
             ...doc.data(),
             id : doc.id,
-            deptname: filteredDept
+            deptname: filteredDept,
           }
           this.projects.push(data)
+          db.collection(subfilteredDept).get().then(
+                querySnapshot => {
+                  querySnapshot.forEach(doc => {
+                    if(doc.data().isFinish == false){
+                    const subdata ={
+                      ...doc.data(),
+                      id : doc.id,
+                    }
+                    this.sub_project.push(subdata)
+                      }
+                    }
+                    )
+                  }
+                )
+          
           }
-        })
+        }
+        )
       }
     )
-
     },
 
     methods: {
+      viewItem (item) {
+        this.view = true
+      },
       editItem (item) {
         this.editedIndex = this.projects.indexOf(item)
         this.editedItem = Object.assign({}, item)
@@ -407,7 +479,7 @@ import { counter } from '@fortawesome/fontawesome-svg-core';
             budget: this.editedItem.budget,
             budget_remain: this.editedItem.budget_remain
           }).then(function(docRef){
-          console.log("updated an project successfully")
+          console.log("updated a project successfully")
           })
                     this.dialog_edit = false
 
@@ -465,9 +537,26 @@ import { counter } from '@fortawesome/fontawesome-svg-core';
           else if(name == 'COE')
            return 'grey'          
 
-      }
-    
       },
+      sub_filterdeptName(project){
+          if(project == '0'  || parseInt(project) == 0)
+            return "ee_subproject"
+          else if(project == '1'  || parseInt(project) == 1)
+            return 'ce_subproject'
+          else if(project == '2'  || parseInt(project) == 2)
+            return 'ae_subproject'
+          else if(project == '3'  || parseInt(project) == 3)
+            return 'ie_subproject'
+          else if(project == '4'  || parseInt(project) == 4)
+            return 'me_subproject'
+          else if(project == '5'  || parseInt(project) == 5)
+            return 'env_subproject'
+          else if(project == '6'  || parseInt(project) == 6)
+            return 'che_subproject'
+          else if(project == '7'  || parseInt(project) == 7)
+            return 'coe_subproject'
+      }
+    }
    
     }
 </script>
