@@ -1,9 +1,19 @@
 <template>
-  <v-card class="mx-auto" max-width="600">
-    
-    <v-container>
-      <v-row justify="center">
-        <v-col cols="6">
+  <v-card class="mt-4 mx-auto" max-width="460">
+    <v-sheet
+      class="v-sheet--offset mx-auto"
+      color="#c43926"
+      elevation="6"
+      max-width="calc(100% - 80%)"
+      style="height: 90px;"
+    >
+      <v-icon class="mt-7 mx-7" large color="white">mdi-account</v-icon>
+    </v-sheet>
+    <div class="title font-weight-bold">User Registration</div>
+
+    <v-container fluid>
+      <v-row justify="space-around">
+        <v-col cols="8">
           <v-form ref="form" v-model="valid" lazy-validation>
             <v-text-field v-model="email" label="Email" required></v-text-field>
 
@@ -16,7 +26,7 @@
 
             <v-btn
               :disabled="!valid"
-              color="#418081"
+              color="#c43926"
               class="mr-4 white--text"
               v-on:click="login"
             >
@@ -28,6 +38,7 @@
     </v-container>
   </v-card>
 </template>
+
 <script>
 import firebase from "firebase";
 export default {
@@ -60,3 +71,10 @@ export default {
 </script>
 
 <style lang="scss" scoped></style>
+<style>
+.v-sheet--offset {
+  top: 30px;
+  right: 230px;
+  position: relative;
+}
+</style>

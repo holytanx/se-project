@@ -1,60 +1,62 @@
 <template>
-  <v-container>
-    <v-layout row justify-space-between>
-      <v-flex md6>
-        <v-card class="mx-auto" max-width="360">
-          <v-card-text>
-            <p class="headline">จำนวนโครงการที่ดำเนินการ</p>
-            <div class="display-2 text-center">
-              <p id="numOf_Continued"></p>
-            </div>
-            <div class="text-lg-right">โครงการ</div>
-          </v-card-text>
-        </v-card>
-      </v-flex>
-      <v-flex md6>
-        <v-card max-width="360">
-          <v-card-text >
-            <p class="headline">จำนวนโครงการที่เสร็จสิ้น</p>
-            <div class="display-2 text-center">
-              <p id="numOf_Finished"></p>
-            </div>
-            <div class="text-lg-right">โครงการ</div>
-          </v-card-text>
-        </v-card>
-      </v-flex>
-    </v-layout>
-    <br />
-    <br />
-    <div class="center">
-      <v-layout row wrap>
-        <v-flex xs4 offset-xs2>
-          <v-card class="mx-auto" max-width="300">
+  <v-sheet id="scrolling-techniques-5" class="overflow-y-auto" max-height="800">
+    <v-container >
+      <v-layout row justify-space-between>
+        <v-flex md6>
+          <v-card class="mx-auto" max-width="360">
             <v-card-text>
-              <p class="headline">งบประมาณทั้งหมดรวม</p>
+              <p class="headline">จำนวนโครงการที่ดำเนินการ</p>
               <div class="display-2 text-center">
-                <p id="totalAmount"></p>
+                <p id="numOf_Continued"></p>
               </div>
-              <div class="text-lg-right">บาท</div>
+              <div class="text-lg-right">โครงการ</div>
             </v-card-text>
           </v-card>
         </v-flex>
-        <v-flex xs4>
-          <v-card class="mx-auto" max-width="300">
+        <v-flex md6>
+          <v-card max-width="360">
             <v-card-text>
-              <p></p>
-              <p class="headline">งบประมาณคงเหลือ</p>
+              <p class="headline">จำนวนโครงการที่เสร็จสิ้น</p>
               <div class="display-2 text-center">
-                <p id="totalRemain"></p>
+                <p id="numOf_Finished"></p>
               </div>
-              <div class="text-lg-right">บาท</div>
+              <div class="text-lg-right">โครงการ</div>
             </v-card-text>
           </v-card>
         </v-flex>
       </v-layout>
-    </div>
-  </v-container>
-</template> 
+      <br />
+      <br />
+      <div class="center">
+        <v-layout row wrap>
+          <v-flex xs4 offset-xs2>
+            <v-card class="mx-auto" max-width="300">
+              <v-card-text>
+                <p class="headline">งบประมาณทั้งหมดรวม</p>
+                <div class="display-2 text-center">
+                  <p id="totalAmount"></p>
+                </div>
+                <div class="text-lg-right">บาท</div>
+              </v-card-text>
+            </v-card>
+          </v-flex>
+          <v-flex xs4>
+            <v-card class="mx-auto" max-width="300">
+              <v-card-text>
+                <p></p>
+                <p class="headline">งบประมาณคงเหลือ</p>
+                <div class="display-2 text-center">
+                  <p id="totalRemain"></p>
+                </div>
+                <div class="text-lg-right">บาท</div>
+              </v-card-text>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </div>
+    </v-container>
+  </v-sheet>
+</template>
 
 <script>
 import firebase from "firebase";
@@ -439,5 +441,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
