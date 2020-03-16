@@ -1,71 +1,43 @@
 <template>
-  <!-- <div>
-    <div class="container">
-      <div class="row">
-        <div class="col s12 m8 offset-m2">
-          <div class="login card-panel grey lighten-4 black-text center">
-            <h3>Login</h3>
-            <form action="index.html">
-              <div class="input-field">
-                <i class="material-icons prefix">email</i>
-                <input type="email" id="email" v-model="email" />
-              </div>
-              <div class="input-field">
-                <i class="material-icons prefix">lock</i>
-                <input type="password" id="password" v-model="password" />
-              </div>
-              <button
-                v-on:click="login"
-                class="btn btn-large btn-extended grey lighten-4 black-text"
-              >
-                Login
-              </button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
-  <v-container>
-  <v-row 
-  justify="center"
-  >
-    <v-col cols="6">
-  <v-form
-    ref="form"
-    v-model="valid"
-    lazy-validation
-  >
-    <v-text-field
-      v-model="email"
-      label="Email"
-      required
-    ></v-text-field>
-
-    <v-text-field
-      v-model="password"
-      type="password"
-      label="Password"
-      required
-    ></v-text-field>
-
- 
-
-    <v-btn
-      :disabled="!valid"
-      color="success"
-      class="mr-4"
-      v-on:click="login"
+  <v-card class="mt-4 mx-auto" max-width="460">
+    <v-sheet
+      class="v-sheet--offset mx-auto"
+      color="#c43926"
+      elevation="6"
+      max-width="calc(100% - 80%)"
+      style="height: 90px;"
     >
-      เข้าสู่ระบบ
-    </v-btn>
+      <v-icon class="mt-7 mx-7" large color="white">mdi-account</v-icon>
+    </v-sheet>
+    <div class="title font-weight-bold">User Registration</div>
 
-  </v-form>
-    </v-col>
-  </v-row>
-  </v-container>
+    <v-container fluid>
+      <v-row justify="space-around">
+        <v-col cols="8">
+          <v-form ref="form" v-model="valid" lazy-validation>
+            <v-text-field v-model="email" label="Email" required></v-text-field>
+
+            <v-text-field
+              v-model="password"
+              type="password"
+              label="Password"
+              required
+            ></v-text-field>
+
+            <v-btn
+              :disabled="!valid"
+              color="#c43926"
+              class="mr-4 white--text"
+              v-on:click="login"
+            >
+              เข้าสู่ระบบ
+            </v-btn>
+          </v-form>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-card>
 </template>
-
 
 <script>
 import firebase from "firebase";
@@ -75,8 +47,7 @@ export default {
     return {
       email: "",
       password: "",
-      valid: true,
-
+      valid: true
     };
   },
   methods: {
@@ -87,8 +58,7 @@ export default {
         .then(
           user => {
             alert("You are logged in as " + this.email);
-             this.$router.go({ path: this.$router.path });
-
+            this.$router.go({ path: this.$router.path });
           },
           err => {
             alert(err.message);
@@ -101,3 +71,10 @@ export default {
 </script>
 
 <style lang="scss" scoped></style>
+<style>
+.v-sheet--offset {
+  top: 30px;
+  right: 230px;
+  position: relative;
+}
+</style>

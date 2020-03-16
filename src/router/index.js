@@ -8,9 +8,11 @@ import DeanTotalBudget from"../views/DeanTotalBudget"
 import AdminDashboard from "../views/AdminDashboard"
 import RegularDashboard from "../views/RegularDashboard"
 import MembersManagement from "../views/MembersManagement";
+import SumEachyear from "../views/SumEachyear";
 import SubprojectManagement from '@/views/SubprojectManagement';
 import SubprojectHistory from '@/views/SubprojectHistory';
-import SubprojectActionHistory from '../views/SubprojectActionHistory';
+import Activities from '@/views/Activities'; 
+import ProjectHistory from '@/views/ProjectHistory';
 import firebase from "firebase";
 import {db} from '../main';
 
@@ -66,6 +68,22 @@ const routes = [
     }
   },
   {
+    path: "/activities",
+    name: "Activities",
+    component: Activities,
+    meta: {
+      requiresAuth:true
+    }
+  },
+  {
+    path: "/projecthistory",
+    name: "ProjectHistory",
+    component: ProjectHistory,
+    meta: {
+      requiresAuth:true
+    }
+  },
+  {
     path: "/subprojectmanagement",
     name: "SubprojectManagement",
     component: SubprojectManagement,
@@ -96,11 +114,12 @@ const routes = [
     meta: {
       requiresAuth:true
     }
-  },
+  }
+  ,
   {
-    path: "/actionhistory",
-    name: "SubprojectActionHistory",
-    component: SubprojectActionHistory,
+    path: "/sumeachyear",
+    name: "SumEachyear",
+    component: SumEachyear,
     meta: {
       requiredAuth:true
     }
@@ -131,12 +150,12 @@ router.beforeEach(
     }
   }else if(to.matched.some(record => record.meta.requiresGuest)){
        //Check if logged in      
- 
     if(firebase.auth().currentUser){
       db.collection("users").get().then(function(querySnapshot){
         querySnapshot.forEach(function(doc){
           if(doc.data().email == firebase.auth().currentUser.email){
             var dept_ID = doc.data().dept_id
+            console.log(dept_ID)
             if(dept_ID == 10 || parseInt(dept_ID) == 10){
               next({
                 path:'/admindashboard',
@@ -146,7 +165,7 @@ router.beforeEach(
               });
             }else if (dept_ID == 14 || parseInt(dept_ID) == 14){
               next({
-                path:'/deantotalbudget',
+                path:'/deandashboard',
                 query:{
                   redirect: to.fullPath
                 }

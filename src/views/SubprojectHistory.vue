@@ -1,37 +1,45 @@
 <template>
-  <div>
-    <br />
-    <br />
-    <h5>ประวัติโครงการย้อนหลัง</h5>
-    <br />
-    <br />
+  <v-sheet id="scrolling-techniques-5" class="overflow-y-auto" max-height="800">
+    <v-container style="height: 1500px;">
+      <br />
+      <br />
+      <h5>ประวัติโครงการย้อนหลัง</h5>
+      <br />
+      <br />
 
-    <v-select v-model="enabled" :items="years" label="เลือกปีการศึกษา" clearable></v-select>
-    <v-data-table
-      :headers="headers"
-      :items="items"
-      :search="search"
-      :single-expand="singleExpand"
-      item-key="name"
-      class="elevation-1"
-    ></v-data-table>
-    <br />
-    <br />
-    <v-data-table
-      :headers="headers"
-      :items="finish_projects"
-      :single-expand="singleExpand"
-      item-key="name"
-      class="elevation-1"
-    >
-      <template v-slot:top>
-        <v-toolbar flat>
-          <v-toolbar-title>โครงการย้อนหลังทั้งหมด</v-toolbar-title>
-          <v-spacer></v-spacer>
-        </v-toolbar>
-      </template>
-    </v-data-table>
-  </div>
+      <v-select
+        v-model="enabled"
+        :items="years"
+        label="เลือกปีการศึกษา"
+        clearable
+      ></v-select>
+      <v-data-table
+        :headers="headers"
+        :items="items"
+        :search="search"
+        :single-expand="singleExpand"
+        item-key="name"
+        class="elevation-1"
+      >
+      </v-data-table>
+      <br />
+      <br />
+      <v-data-table
+        :headers="headers"
+        :items="finish_projects"
+        :single-expand="singleExpand"
+        item-key="name"
+        class="elevation-1"
+      >
+        <template v-slot:top>
+          <v-toolbar flat>
+            <v-toolbar-title>โครงการย้อนหลังทั้งหมด</v-toolbar-title>
+            <v-spacer></v-spacer>
+          </v-toolbar>
+        </template>
+      </v-data-table>
+    </v-container>
+  </v-sheet>
 </template>
 <script>
 import firebase from "firebase";
@@ -83,24 +91,12 @@ export default {
   watch: {
     enabled() {
       var year_id = this.enabled;
-      console.log("enabled: ", year_id);
-      //find year match with year_id
-      function getYear(item) {
-        let y = Object.fromEntries(
-          Object.entries(item).map(([key, value]) => [key, value])
-        );
-        if (y.value == year_id) {
-          return y;
-        }
-      }
-      var year = this.years.filter(getYear)[0];
-      console.log("year id: ", year.value, "and year:", year.text);
-      // find project match with year
+      console.log("enabled: ", year_id.toString());
       function getProjects(item) {
         let i = Object.fromEntries(
           Object.entries(item).map(([key, value]) => [key, value])
         );
-        if (i.year == year.text) {
+        if (i.year == year_id) {
           console.log("I can get one");
           return i;
         }
@@ -110,6 +106,16 @@ export default {
     }
   },
   methods: {
+    initialize() {
+      var d = new Date();
+      var old = d.getFullYear() + 543 - 23;
+      var now = d.getFullYear() + 543;
+      var diff = now - old;
+
+      for (var i = old; i < now; i++) {
+        this.years.push(i);
+      }
+    },
     isEnabled(slot) {
       return this.enabled === slot;
     }
@@ -290,17 +296,7 @@ export default {
     }
   },
   created() {
-    db.collection("archives")
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          this.years.push({
-            ...doc.data(),
-            text: doc.data().year,
-            value: doc.id
-          });
-        });
-      });
+    this.initialize();
   }
 };
 </script>
