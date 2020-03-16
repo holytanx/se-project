@@ -1,8 +1,7 @@
-
 <template>
   <v-container class="grey lighten-5">
     <v-dialog
-        v-model="view" persistent max-width="600px"
+        v-model="view" persistent max-width="1600px"
         >
         <v-card>
           <v-card-title>
@@ -25,7 +24,7 @@
         </v-data-table>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="red" text @click="viewExit">EXIT</v-btn>
+            <v-btn color="red" text @click="viewExit">ปิด</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -230,11 +229,9 @@
 </template>
 
 <script>
-
 import firebase from "firebase";
 import {db} from '../main' 
 import { counter } from '@fortawesome/fontawesome-svg-core';
-
   export default {
     data: () => ({
       search: '',
@@ -265,7 +262,6 @@ import { counter } from '@fortawesome/fontawesome-svg-core';
       add_problems:'',
       add_isFinish:null,
       headers: [
-
           {
             text: 'สาขาวิชา',
             align: 'start',
@@ -273,7 +269,6 @@ import { counter } from '@fortawesome/fontawesome-svg-core';
             value: 'deptname',
           },
           { text: 'ชื่อโครงการ', value: 'project_name' },
-
           { text: 'ประเด็นยุทธ์ศาสตร์', value: 'si_id' },
           { text: 'ยุทธศาสตร์', value: 's_id' },
           { text: 'กลยุทธ์', value: 't_id' },
@@ -318,14 +313,16 @@ import { counter } from '@fortawesome/fontawesome-svg-core';
       },
       
     }),
-
     computed: {
       formTitle () {
         return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
       },
     },
-
-
+    // watch: {
+    //   dialog (val) {
+    //     val || this.close()
+    //   },
+    // },
     created () {
     db.collection('strategicissues').get().then(
       querySnapshot => {
@@ -363,23 +360,6 @@ import { counter } from '@fortawesome/fontawesome-svg-core';
         })
       }
     )
-    db.collection('projects').get().then(
-      querySnapshot => {
-        querySnapshot.forEach(doc => {
-          if(doc.data().isFinish == false){
-          // var filteredDept = this.filterdeptName(doc.data().dept_id);
-          // console.log("Show project: ",filteredDept)
-          const data ={
-            ...doc.data(),
-            id : doc.id,
-            // deptname: filteredDept,
-          }
-          this.projects.push(data)
-          
-          }
-        }
-        )
-      })
      db.collection('departments').get().then(
       querySnapshot => {
         querySnapshot.forEach(doc => {
@@ -394,29 +374,88 @@ import { counter } from '@fortawesome/fontawesome-svg-core';
         })
       }
     )
-
-      db.collection("projects")
-        .add({
-          project_name: this.add_project_name,
-          year: this.add_year,
-          dept_id: this.add_dept_id[0],
-          si_id: this.add_si_id,
-          s_id: this.add_s_id,
-          t_id: this.add_t_id,
-          indicator: this.add_indicator,
-          person_in_charge: this.add_person_in_charge,
-          target: this.add_target,
-          note: this.add_note,
-          result: this.add_result,
-          result_description: this.add_result_description,
-          problems: this.add_problems,
-          isFinish: this.add_isFinish,
-          budget: parseInt(this.add_budget),
-          budget_remain: parseInt(this.add_budget),
-          expense_amount: parseInt(0),
-          expense_remain: parseInt(this.add_budget),
-          disburse_amount: parseInt(0),
-          disburse_remain: parseInt(this.add_budget)
+    db.collection('projects').get().then(
+      querySnapshot => {
+        querySnapshot.forEach(doc => {
+          if(doc.data().isFinish == false){
+          var filteredDept = this.filterdeptName(doc.data().dept_id);
+          console.log(filteredDept)
+          const data ={
+            ...doc.data(),
+            id : doc.id,
+            deptname: filteredDept,
+          }
+          this.projects.push(data)
+          
+          }
+        }
+        )
+      }
+    )
+    },
+    methods: {
+      viewItem (item) {
+        this.view = true
+        db.collection('projects').doc(item.id).get().then(
+            doc => {
+              if(doc.data().isFinish == false){
+                var subfilteredDept = this.sub_filterdeptName(doc.data().dept_id);
+                console.log(subfilteredDept)
+                db.collection(subfilteredDept).get().then(
+                  querySnapshot => {
+                  querySnapshot.forEach(doc => {
+                    if(doc.data().isFinish == false){
+                    const subdata ={
+                      ...doc.data(),
+                      id : doc.id,
+                    }
+                    this.sub_project.push(subdata)
+                      }
+                    }
+                    )
+                  }
+                )
+              }
+            }
+        )
+      },
+      viewExit(item){
+        this.view = false
+        this.sub_project = []
+      },
+      editItem (item) {
+        this.editedIndex = this.projects.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+        this.dialog_edit = true
+      },
+        add_project(){
+        var is = this.add_isFinish
+        if(is == null){
+          this.add_isFinish = false
+        }
+             db.collection('projects').add({
+                project_name: this.add_project_name,
+                year: this.add_year,
+                dept_id: this.add_dept_id[0],
+                si_id: this.add_si_id,
+                s_id: this.add_s_id,
+                t_id: this.add_t_id,
+                indicator: this.add_indicator,
+                person_in_charge: this.add_person_in_charge,
+                target:this.add_target,
+                note:this.add_note,
+                result:this.add_result,
+                result_description:this.add_result_description,
+                problems:this.add_problems,
+                isFinish:this.add_isFinish,
+                budget: parseInt(this.add_budget),
+                budget_remain: parseInt(this.add_budget),
+                deposit:0,
+                disburse_amount:0,
+                disburse_remain:parseInt(this.add_budget),
+                expense_amount:0,
+                withdraw:0,
+                expense_remain:parseInt(this.add_budget)
         })
         .then(function(docRef) {
             console.log("เพิ่มโครงการ ID: ", docRef.id);
@@ -424,44 +463,28 @@ import { counter } from '@fortawesome/fontawesome-svg-core';
         .catch(function(error) {
             console.error("Error adding document: ", error);
         });
-      this.dialog = false;
-    },
-    save_edit() {
-      console.log(this.editedItem.id);
-      db.collection("projects")
-        .doc(this.editedItem.id)
-        .update({
-          project_name: this.editedItem.project_name,
-          si_id: parseInt(this.editedItem.si_id),
-          s_id: parseInt(this.editedItem.s_id),
-          t_id: parseInt(this.editedItem.t_id),
-          indicator: this.editedItem.indicator,
-          target: this.editedItem.target,
-          person_in_charge: this.editedItem.person_in_charge,
-          budget: parseInt(this.editedItem.budget),
-          budget_remain: parseInt(this.editedItem.budget),
-          expense_remain:  parseInt(this.editedItem.budget),
-          disburse_remain:  parseInt(this.editedItem.budget)
-
-        })
-        .then(function(docRef) {
-          console.log("updated an project successfully");
-        });
-      this.dialog_edit = false;
-    },
-    // deleteItem(item) {
-    //   const index = this.projects.indexOf(item);
-    //   confirm("Are you sure you want to delete this item?") &&
-    //     this.projects.splice(index, 1) &&
-    //     db
-    //       .collection("projects")
-    //       .doc(item.id)
-    //       .delete()
-    //       .then(function() {
-    //         console.log("Project successfully deleted!");
-    //       })
-    //                 this.dialog_edit = false
-    //   },
+        this.dialog = false
+      },
+      save_edit(){
+          console.log(this.editedItem.id)
+          db.collection('projects').doc(this.editedItem.id).update({
+            project_name: this.editedItem.project_name,
+            si_id:parseInt(this.editedItem.si_id),
+            s_id:parseInt(this.editedItem.s_id),
+            t_id:parseInt(this.editedItem.t_id),
+            indicator: this.editedItem.indicator,
+            target: this.editedItem.target,
+            person_in_charge: this.editedItem.person_in_charge,
+            budget:  parseInt(this.editedItem.budget),
+            budget_remain: parseInt(this.editedItem.budget),
+            disburse_remain:parseInt(this.editedItem.budget),
+            expense_remain:parseInt(this.editedItem.budget),
+                        
+          }).then(function(docRef){
+          console.log("updated a project successfully")
+          })
+                    this.dialog_edit = false
+      },
             deleteItem (item) {
         const index = this.projects.indexOf(item)
         confirm('Are you sure you want to delete this item?') && this.projects.splice(index, 1) && 
@@ -472,7 +495,31 @@ import { counter } from '@fortawesome/fontawesome-svg-core';
       });
       },
       
-
+      filterdeptName(project){
+          if(project == '0'  || parseInt(project) == 0){
+            return "EE"
+          }else if(project == '1'  || parseInt(project) == 1){
+            return 'CE'
+          }
+          else if(project == '2'  || parseInt(project) == 2){
+            return 'AE'
+          }
+          else if(project == '3'  || parseInt(project) == 3){
+            return 'IE'
+          }
+          else if(project == '4'  || parseInt(project) == 4){
+            return 'ME'
+          }
+          else if(project == '5'  || parseInt(project) == 5){
+            return 'ENVI'
+          }
+          else if(project == '6'  || parseInt(project) == 6){
+            return 'CHEM'
+          }
+          else if(project == '7' || parseInt(project) == 7 ){
+            return 'COE'
+          }
+      },
       getColor(name){
           if(name == 'EE')
            return 'red'
@@ -490,7 +537,6 @@ import { counter } from '@fortawesome/fontawesome-svg-core';
            return 'brown'
           else if(name == 'COE')
            return 'grey'          
-
       },
       sub_filterdeptName(project){
           if(project == '0'  || parseInt(project) == 0)
@@ -512,5 +558,5 @@ import { counter } from '@fortawesome/fontawesome-svg-core';
       }
     }
    
-    
+    }
 </script>

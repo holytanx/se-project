@@ -70,7 +70,7 @@ export default {
           sortable: false,
           value: "deptname"
         },
-        { text: "ประเด็นยุทธ์ศาสตร์", value: "project_name" },
+        { text: "โครงการ", value: "project_name" },
 
         { text: "ประเด็นยุทธ์ศาสตร์", value: "si_id" },
         { text: "ยุทธศาสตร์", value: "s_id" },
@@ -102,16 +102,7 @@ export default {
   },
 
   mounted() {
-    //  myList(year) {
-    //   var d = new Date();
-    //   var old = d.getFullYear()+543-23;
-    //   var now = d.getFullYear()+543;
-    //   var diff = now - old;
-    //   for (var i = old ; i < now ; i++){
-    //     year.push(i)
-    //   }
-    //   return year
-    //  }
+
   },
 
   watch: {

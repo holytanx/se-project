@@ -52,13 +52,17 @@ export default {
       search: null,
       years: [],
       finish_projects: [],
+      deptID:null,
       headers: [
         {
-          text: "ชื่อโครงการ",
+          text: "โครงการหลัก",
           align: "start",
           sortable: false,
-          value: "project_name"
+          value: "project_name",
+
         },
+        { text: "โครงการย่อย", value: "sub_name" },
+        
         { text: "ประเด็นยุทธ์ศาสตร์", value: "si_id" },
         { text: "ยุทธศาสตร์", value: "s_id" },
         { text: "กลยุทธ์", value: "t_id" },
@@ -122,181 +126,326 @@ export default {
   },
   mounted() {
     var id = this;
-    if (firebase.auth().currentUser) {
-      this.isLoggined = true;
-      this.currentUser = firebase.auth().currentUser.email;
-      this.user = this.currentUser;
-      db.collection("users")
-        .get()
-        .then(function(querySnapshot) {
-          querySnapshot.forEach(function(doc) {
-            // doc.data() is never undefined for query doc snapshots
-            if (doc.data().email == firebase.auth().currentUser.email) {
-              id.deptID = doc.data().dept_id;
-              if (id.deptID == 0 || parseInt(id.deptID) == 0) {
-                console.log("EE");
-                id.sub_project_doc = "ee_subproject";
-                db.collection("projects")
-                  .get()
-                  .then(querySnapshot => {
-                    //  console.log(querySnapshot)
-                    querySnapshot.forEach(doc => {
-                      if (
-                        parseInt(doc.data().dept_id) == id.deptID &&
-                        doc.data().isFinish == true
-                      ) {
-                        id.finish_projects.push({
-                          ...doc.data(),
-                          id: doc.id
-                        });
-                      }
-                    });
-                  });
-              } else if (id.deptID == 1 || parseInt(id.deptID) == 1) {
-                console.log("CE");
-                id.sub_project_doc = "ce_subproject";
-                db.collection("projects")
-                  .get()
-                  .then(querySnapshot => {
-                    //  console.log(querySnapshot)
-                    querySnapshot.forEach(doc => {
-                      if (
-                        parseInt(doc.data().dept_id) == id.deptID &&
-                        doc.data().isFinish == true
-                      ) {
-                        id.finish_projects.push({
-                          ...doc.data(),
-                          id: doc.id
-                        });
-                      }
-                    });
-                  });
-              }
-            } else if (id.deptID == 2 || parseInt(id.deptID) == 2) {
-              console.log("AE");
-              id.sub_project_doc = "ae_subproject";
-              db.collection("projects")
-                .get()
-                .then(querySnapshot => {
-                  //  console.log(querySnapshot)
-                  querySnapshot.forEach(doc => {
-                    if (
-                      parseInt(doc.data().dept_id) == id.deptID &&
-                      doc.data().isFinish == true
-                    ) {
-                      id.finish_projects.push({
-                        ...doc.data(),
-                        id: doc.id
-                      });
-                    }
-                  });
-                });
-            } else if (id.deptID == 3 || parseInt(id.deptID) == 3) {
-              id.sub_project_doc = "ie_subproject";
-
-              console.log("IE");
-              db.collection("projects")
-                .get()
-                .then(querySnapshot => {
-                  //  console.log(querySnapshot)
-                  querySnapshot.forEach(doc => {
-                    if (
-                      parseInt(doc.data().dept_id) == id.deptID &&
-                      doc.data().isFinish == true
-                    ) {
-                      id.finish_projects.push({
-                        ...doc.data(),
-                        id: doc.id
-                      });
-                    }
-                  });
-                });
-            } else if (id.deptID == 4 || parseInt(id.deptID) == 4) {
-              id.sub_project_doc = "me_subproject";
-
-              console.log("ME");
-              db.collection("projects")
-                .get()
-                .then(querySnapshot => {
-                  //  console.log(querySnapshot)
-                  querySnapshot.forEach(doc => {
-                    if (
-                      parseInt(doc.data().dept_id) == id.deptID &&
-                      doc.data().isFinish == true
-                    ) {
-                      id.finish_projects.push({
-                        ...doc.data(),
-                        id: doc.id
-                      });
-                    }
-                  });
-                });
-            } else if (id.deptID == 5 || parseInt(id.deptID) == 5) {
-              id.sub_project_doc = "env_subproject";
-
-              console.log("ENVI");
-              db.collection("projects")
-                .get()
-                .then(querySnapshot => {
-                  //  console.log(querySnapshot)
-                  querySnapshot.forEach(doc => {
-                    if (
-                      parseInt(doc.data().dept_id) == id.deptID &&
-                      doc.data().isFinish == true
-                    ) {
-                      id.finish_projects.push({
-                        ...doc.data(),
-                        id: doc.id
-                      });
-                    }
-                  });
-                });
-            } else if (id.deptID == 6 || parseInt(id.deptID) == 6) {
-              id.sub_project_doc = "che_subproject";
-
-              console.log("CHEM");
-              db.collection("projects")
-                .get()
-                .then(querySnapshot => {
-                  //  console.log(querySnapshot)
-                  querySnapshot.forEach(doc => {
-                    if (
-                      parseInt(doc.data().dept_id) == id.deptID &&
-                      doc.data().isFinish == true
-                    ) {
-                      id.finish_projects.push({
-                        ...doc.data(),
-                        id: doc.id
-                      });
-                    }
-                  });
-                });
-            } else if (id.deptID == 7 || parseInt(id.deptID) == 7) {
-              console.log("COE");
-              id.sub_project_doc = "coe_subproject";
-              db.collection("projects")
-                .get()
-                .then(querySnapshot => {
-                  //  console.log(querySnapshot)
-                  querySnapshot.forEach(doc => {
-                    if (
-                      parseInt(doc.data().dept_id) == id.deptID &&
-                      doc.data().isFinish == true
-                    ) {
-                      id.finish_projects.push({
-                        ...doc.data(),
-                        id: doc.id
-                      });
-                    }
-                  });
-                });
-            }
-          });
-        });
-    }
+    
   },
   created() {
     this.initialize();
+    if(firebase.auth().currentUser){
+        this.isLoggined = true;
+        this.currentUser = firebase.auth().currentUser.email;
+        this.user = this.currentUser
+        console.log(this.currentUser)
+
+        db.collection("users").get().then(
+          querySnapshot => {
+            querySnapshot.forEach(doc=>{
+              if(doc.data().email == this.user){
+                this.deptID = doc.data().dept_id
+                this.user_name = doc.data().name
+                this.user_email = doc.data().email
+                this.user_department = doc.data().deptname
+            if(this.deptID == 0 || parseInt(this.deptID) == 0){
+                  console.log("EE")
+                  this.sub_project_doc = "ee_subproject"
+                      db.collection('projects').get().then(
+                      querySnapshot => {
+                        //  console.log(querySnapshot)
+                        querySnapshot.forEach(doc => {
+                          // this.pp.push(doc.data())
+
+                          if(parseInt(doc.data().dept_id) == this.deptID && (doc.data().isFinish == true)){
+                            this.finish_projects.push({
+                              ...doc.data(), 
+                              id : doc.id
+                              ,
+                              'text' : doc.data().project_name,
+                              'value': [doc.id,doc.data().budget_remain,doc.data().project_name]
+                              })
+                          }
+                          
+                        })
+                      })
+                      db.collection('ee_subproject').get().then(
+                        querySnapshot =>{
+                          querySnapshot.forEach(doc => {
+                            if(doc.data().isFinish == true){
+                            this.finish_projects.push({
+                              ...doc.data(),
+                              id : doc.id
+                              ,
+                              'text' : doc.data().sub_name,
+                              'value': [doc.id,doc.data().sub_name]
+                            })
+                            }
+                          })
+                          
+                        }
+                      )
+         }
+         else if (this.deptID == 1 || parseInt(this.deptID )==1 ){
+                  console.log("CE")
+                  this.sub_project_doc = "ce_subproject"
+                      db.collection('projects').get().then(
+                      querySnapshot => {
+                        //  console.log(querySnapshot)
+                        querySnapshot.forEach(doc => {
+                          // this.pp.push(doc.data())
+
+                          if(parseInt(doc.data().dept_id) == this.deptID && (doc.data().isFinish == true)){
+                            this.finish_projects.push({
+                              ...doc.data(), 
+                              id : doc.id
+                              ,
+                              'text' : doc.data().project_name,
+                              'value': [doc.id,doc.data().budget_remain,doc.data().project_name]
+                              })
+                          }                         
+                        })
+                      })
+                      db.collection('ce_subproject').get().then(
+                        querySnapshot =>{
+                          querySnapshot.forEach(doc => {
+                          if(doc.data().isFinish == true){
+                            this.finish_projects.push({
+                              ...doc.data(),
+                              id : doc.id
+                              ,
+                              'text' : doc.data().sub_name,
+                              'value': [doc.id,doc.data().sub_name]
+                            })
+                            }
+                          })
+                        }
+                      )
+                }
+                else if (this.deptID == 2 || parseInt(this.deptID )==2 ){
+                  console.log("AE")
+                  this.sub_project_doc = "ae_subproject"
+                      db.collection('projects').get().then(
+                      querySnapshot => {
+                        //  console.log(querySnapshot)
+                        querySnapshot.forEach(doc => {
+                          // this.pp.push(doc.data())
+                          if(parseInt(doc.data().dept_id) == this.deptID && (doc.data().isFinish == true)){
+                            this.finish_projects.push({
+                              ...doc.data(), 
+                              id : doc.id
+                              ,
+                              'text' : doc.data().project_name,
+                              'value': [doc.id,doc.data().budget_remain,doc.data().project_name]
+                              })
+                          }
+                          
+                        })
+                      })
+                      db.collection('ae_subproject').get().then(
+                        querySnapshot =>{
+                          querySnapshot.forEach(doc => {
+                            if(doc.data().isFinish == true){
+                            this.finish_projects.push({
+                              ...doc.data(),
+                              id : doc.id
+                              ,
+                              'text' : doc.data().sub_name,
+                              'value': [doc.id,doc.data().sub_name]
+                            })
+                            }
+                          })
+                        }
+                      )
+                }
+                else if (this.deptID == 3 || parseInt(this.deptID )==3){
+                  this.sub_project_doc = "ie_subproject"
+
+                  console.log("IE")
+                       db.collection('projects').get().then(
+                      querySnapshot => {
+                        //  console.log(querySnapshot)
+                        querySnapshot.forEach(doc => {
+                          // this.pp.push(doc.data())
+                          if(parseInt(doc.data().dept_id) == this.deptID && (doc.data().isFinish == true)){
+                            this.finish_projects.push({
+                              ...doc.data(), 
+                              id : doc.id
+                              ,
+                              'text' : doc.data().project_name,
+                              'value': [doc.id,doc.data().budget_remain,doc.data().project_name]
+                              })
+                          }
+                          
+                        })
+                      })
+                      db.collection('ie_subproject').get().then(
+                        querySnapshot =>{
+                          querySnapshot.forEach(doc => {
+                            if(doc.data().isFinish == true){
+                            this.finish_projects.push({
+                              ...doc.data(),
+                              id : doc.id
+                              ,
+                              'text' : doc.data().sub_name,
+                              'value': [doc.id,doc.data().sub_name]
+                            })
+                            }
+                          })
+                        }
+                      )
+                }
+                else if (this.deptID == 4 || parseInt(this.deptID )==4){
+                  this.sub_project_doc = "me_subproject"
+
+                  console.log("ME")
+                      db.collection('projects').get().then(
+                      querySnapshot => {
+                        //  console.log(querySnapshot)
+                        querySnapshot.forEach(doc => {
+                          // this.pp.push(doc.data())
+                          if(parseInt(doc.data().dept_id) == this.deptID && (doc.data().isFinish == true)){
+                            this.finish_projects.push({
+                              ...doc.data(), 
+                              id : doc.id
+                              ,
+                              'text' : doc.data().project_name,
+                              'value': [doc.id,doc.data().budget_remain,doc.data().project_name]
+                              })
+                          }
+                          
+                        })
+                      })
+                      db.collection('me_subproject').get().then(
+                        querySnapshot =>{
+                          querySnapshot.forEach(doc => {
+                             if(doc.data().isFinish == true){
+                            this.finish_projects.push({
+                              ...doc.data(),
+                              id : doc.id
+                              ,
+                              'text' : doc.data().sub_name,
+                              'value': [doc.id,doc.data().sub_name]
+                            })
+                            }
+                          })
+                        }
+                      )
+                }
+                else if (this.deptID == 5 || parseInt(this.deptID )==5){
+                  this.sub_project_doc = "env_subproject"
+
+                  console.log("ENVI")
+                       db.collection('projects').get().then(
+                      querySnapshot => {
+                        //  console.log(querySnapshot)
+                        querySnapshot.forEach(doc => {
+                          // this.pp.push(doc.data())
+                          if(parseInt(doc.data().dept_id) == this.deptID && (doc.data().isFinish == true)){
+                            this.finish_projects.push({
+                              ...doc.data(), 
+                              id : doc.id
+                              ,
+                              'text' : doc.data().project_name,
+                              'value': [doc.id,doc.data().budget_remain,doc.data().project_name]
+                              })
+                          }
+                          
+                        })
+                      })
+                      db.collection('env_subproject').get().then(
+                        querySnapshot =>{
+                          querySnapshot.forEach(doc => {
+                            if(doc.data().isFinish == true){
+                            this.finish_projects.push({
+                              ...doc.data(),
+                              id : doc.id
+                              ,
+                              'text' : doc.data().sub_name,
+                              'value': [doc.id,doc.data().sub_name]
+                            })
+                            }
+                          })
+                        }
+                      )
+                }                
+else if (this.deptID == 6 || parseInt(this.deptID )==6){
+                  this.sub_project_doc = "che_subproject"
+
+                  console.log("CHEM")
+                       db.collection('projects').get().then(
+                      querySnapshot => {
+                        //  console.log(querySnapshot)
+                        querySnapshot.forEach(doc => {
+                          // this.pp.push(doc.data())
+                          if(parseInt(doc.data().dept_id) == this.deptID && (doc.data().isFinish == true)){
+                            this.finish_projects.push({
+                              ...doc.data(), 
+                              id : doc.id
+                              ,
+                              'text' : doc.data().project_name,
+                              'value': [doc.id,doc.data().budget_remain,doc.data().project_name]
+                              })
+                          }
+                          
+                        })
+                      })
+                      db.collection('che_subproject').get().then(
+                        querySnapshot =>{
+                          querySnapshot.forEach(doc => {
+                            if(doc.data().isFinish == true){
+                            this.finish_projects.push({
+                              ...doc.data(),
+                              id : doc.id
+                              ,
+                              'text' : doc.data().sub_name,
+                              'value': [doc.id,doc.data().sub_name]
+                            })
+                            }
+                          })
+                        }
+                      )
+                }
+               else if (this.deptID == 7 || parseInt(this.deptID )==7){
+                  console.log("COE")
+                  this.sub_project_doc = "coe_subproject"
+
+                      db.collection('projects').get().then(
+                      querySnapshot => {
+                        //  console.log(querySnapshot)
+                        querySnapshot.forEach(doc => {
+                          // this.pp.push(doc.data())
+
+                          if(parseInt(doc.data().dept_id) == this.deptID && (doc.data().isFinish == true)){
+                            this.finish_projects.push({
+                              ...doc.data(), 
+                              id : doc.id
+                              ,
+                              'text' : doc.data().project_name,
+                              'value': [doc.id,doc.data().budget_remain,doc.data().project_name]
+                              })
+                          }
+                          
+                        })
+                      })
+                      db.collection('coe_subproject').get().then(
+                        querySnapshot =>{
+                          querySnapshot.forEach(doc => {
+                            if(doc.data().isFinish == true){
+                            this.finish_projects.push({
+                              ...doc.data(),
+                              id : doc.id
+                              ,
+                              'text' : doc.data().sub_name,
+                              'value': [doc.id,doc.data().sub_name]
+                            })
+                            }
+                          })
+                        }
+                      )
+                }                                
+              }
+            })
+          }
+        )
+     } 
+    
   }
 };
 </script>

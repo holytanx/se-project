@@ -78,7 +78,8 @@ export default {
       transectionHistory:[
 
         {text:'วัน/เวลา', value: 'date'},
-        {text:'รายละเอียด', value: 'description'},
+        {text:'รายละเอียด', value: 'details'},
+        {text:'ชนิดการโอน', value: 'pattern'},
         {text:'โอนโดย', value: 'user_name'},
         {text:'', value: 'user_email'},
         {text:'สาขาวิชา', value: 'user_department'},
@@ -137,12 +138,32 @@ export default {
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
+         if(doc.data().type == 'oldMain'){
                 vm.transaction.push({
               ...doc.data(),
               date: doc.data().time.toDate(),
-              description: 'โอนเงินจาก ' + doc.data().from_project +"ไปยัง" + doc.data().to_project
+              pattern: 'การโอนระหว่างโครงการหลัก',
+              details: 'โอนเงินจาก' + doc.data().from_project+"ไปยัง"+ doc.data().to_project+"เป็นจำนวนเงิน" +doc.data().amount+ "บาท"
                 }
               )              
+         }else if(doc.data().type == 'oldSub'){
+                vm.transaction.push({
+              ...doc.data(),
+              date: doc.data().time.toDate(),
+              pattern: 'การโอนระหว่างโครงการย่อย (ภายใต้โครงการหลักเดียวกัน)',
+              details: 'โอนเงินจาก' + doc.data().from_project+"ไปยัง"+ doc.data().to_project+"เป็นจำนวนเงิน" +doc.data().amount+ "บาท"
+                }
+              )           
+         }
+         else if(doc.data().type == 'oldsubmain'){
+                vm.transaction.push({
+              ...doc.data(),
+              date: doc.data().time.toDate(),
+              pattern: 'การโอนระหว่างโครงการหลักไปยังโครงการย่อย',
+              details: 'โอนเงินจาก' + doc.data().from_project+"ไปยัง"+ doc.data().to_project+"เป็นจำนวนเงิน" +doc.data().amount+ "บาท"
+                }
+              )           
+         }             
         });
       });
     db.collection("sub_transaction_activities")
@@ -154,17 +175,31 @@ export default {
               ...doc.data(),
               date: doc.data().time.toDate(),
 
-              details: 'ขออนุมัติเงินใช้จำนวน ' + doc.data().amount +"บาท ภายใต้โครงการ" + doc.data().sub_name
+              details: 'ขออนุมัติเงินใช้จำนวน ' + doc.data().amount +"บาท ภายใต้โครงการ(ย่อย) " + doc.data().sub_name
                 }
               )              
-          }else{
+          }else if(doc.data().type == 'expenseMain'){
+                vm.expense.push({
+              ...doc.data(),
+              date: doc.data().time.toDate(),
+                
+              details: 'ขออนุมัติใช้เงินจำนวน ' + doc.data().amount +"บาท ภายใต้โครงการ(หลัก) " + doc.data().project_name
+                }
+              )
+          }else if(doc.data().type== 'disburse'){
                 vm.disburse.push({
               ...doc.data(),
               date: doc.data().time.toDate(),
-
-              details: 'ขอเบิกจ่าย ' + doc.data().amount +"บาท ภายใต้โครงการ" + doc.data().sub_name
-                }
-              )
+                
+              details: 'ขอเบิกจ่าย ' + doc.data().amount +"บาท ภายใต้โครงการ(ย่อย) " + doc.data().sub_name
+                })         
+          }else if(doc.data().type== 'disburseMain'){
+                vm.disburse.push({
+              ...doc.data(),
+              date: doc.data().time.toDate(),
+                
+              details: 'ขอเบิกจ่าย ' + doc.data().amount +"บาท ภายใต้โครงการ(หลัก) " + doc.data().project_name
+                })       
           }             
         });
       });

@@ -182,7 +182,7 @@
             <div class="my-2">
       <v-dialog v-model="dialog_deposit" persistent max-width="600px">
       <template v-slot:activator="{ on }">
-        <v-btn color="warning" dark v-on="on">โอนออก
+        <v-btn color="warning" dark v-on="on">โอนออกระหว่างโครงการหลัก
         <v-icon right dark>mdi-cloud-upload</v-icon>
         </v-btn>
       </template>
@@ -286,6 +286,7 @@
                   required
                 ></v-select>
               </v-col>
+
               <v-col cols="12">
                 <v-text-field v-model="add_sub_name" label="ชื่อโครงการย่อย" required></v-text-field>
               </v-col>
@@ -323,11 +324,12 @@
                 <v-text-field v-model="add_person_in_charge" label="ผู้รับผิดชอบ" type="text" ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field v-model="add_budget" label="งบประมาณ" type="number" required></v-text-field>
+                <v-text-field v-if="add_project_id!=null" v-model="add_project_id[2]" label="จำนวนเงินคงเหลือในโครงการหลัก (บาท)" disabled></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field v-model="add_budget_remain" label="งบประมาณคงเหลือ (ตามแผน)" type="number" required></v-text-field>
+                <v-text-field v-model="add_budget" label="งบประมาณ" type="number" required></v-text-field>
               </v-col>
+
               <v-col cols="12">
                 <v-text-field v-model="add_note" label="หมายเหตุ" type="text" ></v-text-field>
               </v-col>
@@ -374,7 +376,7 @@
             <v-row>
               <v-col cols="12">
                 <v-select
-              v-model.lazy="expense_project_id"
+              v-model="expense_project_id"
                   :items="projects"
                   label="โครงการหลัก"
                   required
@@ -382,6 +384,7 @@
               </v-col>
                <v-col cols="12">
                 <v-select
+                  v-if="subprojects_selected.length !== 0"
               v-model="expense_sub_project_id"
                   :items="subprojects_selected"
                   label="โครงการย่อย"
@@ -426,7 +429,7 @@
             <v-row>
               <v-col cols="12">
                 <v-select
-              v-model.lazy="expense_project_id"
+              v-model="expense_project_id"
                   :items="projects"
                   label="โครงการหลัก"
                   required
@@ -434,7 +437,8 @@
               </v-col>
                <v-col cols="12">
                 <v-select
-              v-model="disburse_sub_project_id"
+                  v-if="subprojects_selected.length !== 0"
+                  v-model="disburse_sub_project_id"
                   :items="subprojects_selected"
                   label="โครงการย่อย"
                   required
@@ -460,6 +464,123 @@
       </v-card>
     </v-dialog>          
           </v-col>
+          <v-col 
+          cols="1"
+          md="1">
+          
+          </v-col>
+         </v-row>
+         <v-row justify="end">
+           <v-col cols="1" md="2">
+               <v-dialog v-model="dialog_deposit_sub" persistent max-width="800px">
+      <template v-slot:activator="{ on }">
+          <v-btn color="light-blue darken-3"  dark v-on="on">โอนเงินระหว่างโครงการย่อย</v-btn>
+      </template>
+      <v-card>
+        <v-card-title>
+          <span class="headline">โอนเงินระหว่างโครงการย่อย (ภายใต้โครงการหลักเดียวกัน)</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-select
+              v-model="selected_deposit_mainproject"
+                  :items="projects"
+                  label="โครงการหลัก"
+                  required
+                ></v-select>
+              </v-col>
+               <v-col cols="12">
+                <v-select
+                  v-model="selected_deposit_subproject_from"
+                  :items="subproject_deposit_finish"
+                  label="จากโครงการ"
+                  required
+                ></v-select>
+              </v-col>
+               <v-col cols="12">
+                <v-select
+                  v-model="selected_deposit_subproject_to"
+                  :items="subproject_deposit_unfinish"
+                  label="ไปยัง"
+                  required
+                ></v-select>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field v-if="selected_deposit_subproject_from != null" v-model="selected_deposit_subproject_from[1]" label="จำนวนเงินที่สามารถโอนได้" type="number" disabled></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field v-model="deposit_sub_amount" label="จำนวนเงิน (บาท)" type="number" ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field v-model="deposit_description" label="คำอธิบาย" type="text" ></v-text-field>
+              </v-col>
+                        
+              
+            </v-row>
+          </v-container>
+          <small>*indicates required field</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="danger" text @click="dialog_deposit_sub = false">ปิด</v-btn>
+          <v-btn color="success" text @click="deposit_budget_subproject">โอน</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>   
+           </v-col>
+      <v-col cols="1" md="2">
+               <v-dialog v-model="dialog_deposit_submain" persistent max-width="800px">
+      <template v-slot:activator="{ on }">
+          <v-btn color="deep-purple darken-1"  dark v-on="on">โอนเงินเข้าโครงการย่อย</v-btn>
+      </template>
+      <v-card>
+        <v-card-title>
+          <span class="headline">โอนเงินจากโครงการหลักเข้าโครงการย่อย</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-select
+              v-model="selected_deposit_mainsub"
+                  :items="finish_projects"
+                  label="จากโครงการ"
+                  required
+                ></v-select>
+              </v-col>
+               <v-col cols="12">
+                <v-select
+                  v-model="selected_deposit_submain_to"
+                  :items="submain_deposit_unfinish"
+                  label="ไปโครงการ"
+                  required
+                ></v-select>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field v-if="selected_deposit_mainsub != null" v-model="selected_deposit_mainsub[1]" label="จำนวนเงินที่สามารถโอนได้" type="number" disabled></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field v-model="deposit_amount" label="จำนวนเงิน (บาท)" type="number" ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field v-model="deposit_description" label="คำอธิบาย" type="text" ></v-text-field>
+              </v-col>
+                        
+              
+            </v-row>
+          </v-container>
+          <small>*indicates required field</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="danger" text @click="dialog_deposit_submain = false">ปิด</v-btn>
+          <v-btn color="success" text @click="deposit_budget_submain">โอน</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>   
+           </v-col>          
          </v-row>
 
 
@@ -539,9 +660,14 @@ export default {
       add_isFinish:null,
       sub_project_doc:"",
       enabled: null,
+      deptID: null,
       sub_project: [],
       finish_projects: [],
+      finish_subprojects: [],
       selected_finish_project: [],
+      submain_deposit_unfinish:[],
+      deposit_sub_amount: null,
+      deposit_description: null,
       deposit_amount:null,
       search: null,
       dialog_edit: false,
@@ -549,12 +675,23 @@ export default {
       dialog_view: false,
       dialog_addsubproject : false,
       dialog_deposit: false,
+      dialog_deposit_sub: false,
       dialog_expense: false,
       dialog_disburse:false,
+      dialog_deposit_submain:false,
       expense_sub_project_id:null,
       disburse_sub_project_id:null,
       subprojects_selected:[],
       selected_deposit_project:null,
+      subproject_deposit_unfinish:[],
+        subproject_deposit_finish:[],
+      deposit_subproject_finish_amount:null,
+      selected_deposit_mainproject:null,
+      selected_deposit_mainsub:null,
+      selected_deposit_submain_to:null,
+      
+      selected_deposit_subproject_from:null,
+      selected_deposit_subproject_to:null,      
       editedIndex: -1,
       isLoggedin: false,
       expense_amount: null,
@@ -628,12 +765,13 @@ export default {
           { text: 'กลยุทธ์', value: 't_id' },
           { text: 'ผู้รับผิดชอบ', value: 'person_in_charge' },
           { text: 'งบประมาณ', value: 'budget' },
+          { text: 'โอนเข้า', value: 'deposit' },
+          { text: 'โอนออก', value: 'withdraw' },
           { text: 'คงเหลือตามแผน', value: 'budget_remain'},
           { text: 'ขออนุมัติใช้', value: 'expense_amount'},
           { text: 'คงเหลือจากหลักการ', value: 'expense_remain'},
           { text: 'เบิกจ่าย', value: 'disburse_amount'},
           { text: 'คงเหลือจากเบิกจ่าย', value: 'disburse_remain' },
-
           { text: 'รายละเอียด', value: 'action', sortable: false }, 
           {text: 'สถานะ', value:'isFinish'}
         
@@ -664,7 +802,11 @@ export default {
           this.items = list
       },
       expense_project_id(){
-         var main = this.expense_project_id
+         var main = this.expense_project_id[0]
+         function isEmpty(obj) {
+          return  false
+          } 
+         console.log("show main ", main)
           function get(item){
             let sub = Object.fromEntries(Object.entries(item).map(([key,value])=> [key,value]))
             let selected = {text: '', value: ''}
@@ -672,10 +814,12 @@ export default {
               selected.text = sub.sub_name
               selected.value = sub.id
               return selected
+            }else if(isEmpty(selected)){
+              //
             }
           }
           var list = this.sub_project.filter(get)
-          console.log(list)
+          console.log(list.length)
           this.subprojects_selected = list        
       },
       expense_sub_project_id(){
@@ -685,6 +829,57 @@ export default {
       disburse_sub_project_id(){
         var main = this.disburse_sub_project_id
          console.log("subproject selected to expense : ", main[1])
+      },
+
+      // โอนระหว่างโครงการย่อย
+      selected_deposit_mainproject(){
+        var main = this.selected_deposit_mainproject[0]
+        console.log("hello main", main)
+         function isEmpty(obj) {
+          return  false
+          } 
+          function getunfinish(item){
+            let sub = Object.fromEntries(Object.entries(item).map(([key,value])=> [key,value]))
+            let selected = {text: '', value: ''}
+            if(sub.project_id == main && sub.isFinish == false){
+              console.log("sub")
+              selected.text = sub.sub_name
+              selected.value = sub.id
+              return selected
+            }else if(isEmpty(selected)){
+              //
+            }
+          }
+          var tolist = this.sub_project.filter(getunfinish)
+          this.subproject_deposit_unfinish = tolist
+          function getfinish(item){
+            let sub = Object.fromEntries(Object.entries(item).map(([key,value])=> [key,value]))
+            let selected = {text: '', value: ''}
+            if(sub.project_id == main && sub.isFinish == true){
+              console.log("sub")
+              selected.text = sub.sub_name
+              selected.value = sub.id
+              return selected
+            }else if(isEmpty(selected)){
+              //
+            }          
+          }
+            var fromlist = this.sub_project.filter(getfinish)
+            this.subproject_deposit_finish = fromlist  
+      },
+
+      selected_deposit_mainsub(){
+          function getunfinishsub(item){
+            let sub = Object.fromEntries(Object.entries(item).map(([key,value])=> [key,value]))
+            let selected = {text: '', value: ''}
+            if(sub.isFinish == false){
+              selected.text = sub.sub_name
+              selected.value = sub.id
+              return selected
+          }
+          }
+            var tosublist = this.sub_project.filter(getunfinishsub)
+            this.submain_deposit_unfinish = tosublist          
       }
       
     },
@@ -814,7 +1009,9 @@ export default {
                 disburse_amount: 0,
                 disburse_remain: parseInt(this.add_budget),
                 expense_amount: 0,
-                expense_remain: parseInt(this.add_budget)
+                expense_remain: parseInt(this.add_budget),
+                withdraw:0,
+                deposit:0,
 
 
         })
@@ -838,10 +1035,13 @@ export default {
         })
         .catch(function(error) {
             console.error("Error adding Log sub project: ", error);
-        });        
+        });     
+        this.dialog_addsubproject = false
 
       },
       expense_subproject(){
+        // เก็บรายการขออนุมัติใช้ย่อย
+        if(this.expense_sub_project_id !== null){
         db.collection("sub_transaction_activities").add({
           amount: parseInt(this.expense_amount),
           type:'expense',
@@ -859,8 +1059,38 @@ export default {
         .catch(function(error) {
             console.error("Error adding Log sub transaction: ", error);
         });
-  
-        db.collection("projects").doc(this.expense_project_id).update({
+        }
+        // เก็บรายการขออนุมัติใหญ่
+        if(this.expense_sub_project_id === null){
+        db.collection("sub_transaction_activities").add({
+          amount: parseInt(this.expense_amount),
+          type:'expenseMain',
+          time:firebase.firestore.FieldValue.serverTimestamp(),
+          user_name: this.user_name,
+          user_email: this.user_email,
+          user_department: this.user_department,
+          project_name: this.expense_project_id[1],
+          description: this.expense_description,
+
+        })
+        .then(function(docRef) {
+            console.log("sub-transaction log written with ID: ", docRef.id);
+        })
+        .catch(function(error) {
+            console.error("Error adding Log sub transaction: ", error);
+        });
+        }  
+        // ขออนุมัติใช้สำหรับโครงการใหญ่ไม่มีย่อย
+        if(this.expense_sub_project_id === null){
+        db.collection("projects").doc(this.expense_project_id[0]).update({
+          expense_remain: firebase.firestore.FieldValue.increment(-parseInt(this.expense_amount)),
+          expense_amount: firebase.firestore.FieldValue.increment(parseInt(this.expense_amount)),
+        })
+        console.log("Amount expense for main : ", this.expense_amount, "id : ",this.expense_project_id[0])
+        this.dialog_expense = false
+        // ขออนุมัติใช้สำหรับโครงการย่อย
+        }else{
+          db.collection("projects").doc(this.expense_project_id[0]).update({
           expense_remain: firebase.firestore.FieldValue.increment(-parseInt(this.expense_amount)),
           expense_amount: firebase.firestore.FieldValue.increment(parseInt(this.expense_amount)),
         })
@@ -868,11 +1098,32 @@ export default {
           expense_remain: firebase.firestore.FieldValue.increment(-parseInt(this.expense_amount)),
           expense_amount: firebase.firestore.FieldValue.increment(parseInt(this.expense_amount)),
         })
-        console.log("Amount : " , this.expense_amount)
+        console.log("Amount expense for sub : ", this.expense_amount, "id : ",this.expense_sub_project_id[0])
         this.dialog_expense = false
+        }
+
 
       },
       disburse_subproject(){
+        // ประวัติการทำรายของโครงการย่อย
+        if(this.disburse_sub_project_id == null){
+          db.collection("sub_transaction_activities").add({
+          amount: parseInt(this.disburse_amount),
+          type:'disburseMain',
+          time:firebase.firestore.FieldValue.serverTimestamp(),
+          user_name: this.user_name,
+          user_email: this.user_email,
+          user_department: this.user_department,
+          project_name: this.expense_project_id[1],
+          description: this.disburse_description,
+
+        })
+        .then(function(docRef) {
+            console.log("sub-transaction log written with ID: ", docRef.id);
+        });       
+        // ประวัติการทำรายของโครงการย่อย
+
+        }else if(this.disburse_sub_project_id != null){
          db.collection("sub_transaction_activities").add({
           amount: parseInt(this.disburse_amount),
           type:'disburse',
@@ -882,15 +1133,23 @@ export default {
           user_department: this.user_department,
           sub_name: this.disburse_sub_project_id[1],
           description: this.disburse_description,
-
         })
         .then(function(docRef) {
             console.log("sub-transaction log written with ID: ", docRef.id);
-        })
-        .catch(function(error) {
-            console.error("Error adding Log sub transaction: ", error);
         });
-        db.collection("projects").doc(this.expense_project_id).update({
+        }
+
+        // เบิกจ่ายหลัก
+        if(this.disburse_sub_project_id == null){
+        db.collection("projects").doc(this.expense_project_id[0]).update({
+          disburse_remain: firebase.firestore.FieldValue.increment(-parseInt(this.disburse_amount)),
+          disburse_amount: firebase.firestore.FieldValue.increment(parseInt(this.disburse_amount)),
+        })
+        console.log("Amount disburse for main : ", this.disburse_amount, "id : ",this.expense_project_id[0])
+        this.dialog_disburse = false
+        // เบิกจ่ายย่อย
+        }else{
+        db.collection("projects").doc(this.expense_project_id[0]).update({
           disburse_remain: firebase.firestore.FieldValue.increment(-parseInt(this.disburse_amount)),
           disburse_amount: firebase.firestore.FieldValue.increment(parseInt(this.disburse_amount)),
         })
@@ -898,92 +1157,222 @@ export default {
           disburse_remain: firebase.firestore.FieldValue.increment(-parseInt(this.disburse_amount)),
           disburse_amount: firebase.firestore.FieldValue.increment(parseInt(this.disburse_amount)),
         })
-        console.log("Amount dis : ", this.disburse_amount)
+        console.log("Amount disburse for subproject : ", this.disburse_amount, "id : ",this.disburse_sub_project_id[0])
         this.dialog_disburse = false
+        }
+
       },
       
       deposit_budget(){
-        console.log(this.selected_finish_project)
-        console.log(this.selected_deposit_project[1])
-        console.log(this.deposit_amount)
+        console.log("this from",this.selected_finish_project)
+        console.log("this to", this.selected_deposit_project[1])
+        console.log("this amount to deposit",this.deposit_amount)
         var deposit_amount = parseInt(this.deposit_amount)
         var finish_project_id = this.selected_finish_project[0]
         var finish_project_budget =this.selected_finish_project[1]
         var finish_project_name = this.selected_finish_project[2]
         var target_project_id = this.selected_deposit_project[0]
+        var target_project_name = this.selected_deposit_project[1]
+        var subproject_title = this.sub_project_doc
+        var user_name = this.user_name
+        var user_email= this.user_email
+        var user_department= this.user_department
+
         var target_project = this.projects.filter(function(project){
           return project.id == target_project_id
         })
         //update target project budget 
-        console.log(typeof deposit_amount)
-        db.collection("projects").doc(target_project_id).update({
-          budget_remain: firebase.firestore.FieldValue.increment(deposit_amount),
-          deposit: firebase.firestore.FieldValue.increment(deposit_amount),
-          expense_remain: firebase.firestore.FieldValue.increment(deposit_amount),
-          disburse_remain: firebase.firestore.FieldValue.increment(deposit_amount),
-
+        var mainRef = db.collection("projects").doc(finish_project_id);
+        mainRef.get().then(function(doc) {
+            if (doc.exists) {
+            db.collection("projects").doc(target_project_id).update({
+              budget_remain: firebase.firestore.FieldValue.increment(deposit_amount),
+              deposit: firebase.firestore.FieldValue.increment(deposit_amount),
+              expense_remain: firebase.firestore.FieldValue.increment(deposit_amount),
+              disburse_remain: firebase.firestore.FieldValue.increment(deposit_amount),
+            })
+            db.collection("projects").doc(finish_project_id).update({
+              disburse_remain: firebase.firestore.FieldValue.increment(-deposit_amount),
+              withdraw:firebase.firestore.FieldValue.increment(deposit_amount)
+            })
+            } else {
+              console.log("this from project is sub project")
+            }
+                 db.collection("old_transaction_activities").add({
+                  time:firebase.firestore.FieldValue.serverTimestamp(),
+                  user_name: user_name,
+                  type: "oldMain",
+                  user_email: user_email,
+                  user_department: user_department,
+                  from_project: finish_project_name,
+                  to_project: target_project_name,
+                  amount: parseInt(deposit_amount)
+                })
+                .then(function(docRef) {
+                    console.log("depositing between projects log written with ID: ", docRef.id);
+                })
+                .catch(function(error) {
+                    console.error("Error depositing Log: ", error);
+                });         
         })
-        db.collection("projects").doc(finish_project_id).update({
-          budget_remain: parseInt(finish_project_budget)-deposit_amount,
-          withdraw:firebase.firestore.FieldValue.increment(deposit_amount)
-
-        })
-         db.collection("old_transaction_activities").add({
-          time:firebase.firestore.FieldValue.serverTimestamp(),
-          user_name: this.user_name,
-          user_email: this.user_email,
-          user_department: this.user_department,
-          from_project: finish_project_name,
-          to_project: this.selected_deposit_project[1],
-          amount: parseInt(deposit_amount)
-        })
-        .then(function(docRef) {
-            console.log("depositing between projects log written with ID: ", docRef.id);
-        })
-        .catch(function(error) {
-            console.error("Error depositing Log: ", error);
-        });         
         this.dialog_deposit = false
-      }
+      },
+      deposit_budget_subproject(){
+        console.log("main", this.selected_deposit_mainproject)
+        console.log("from: ", this.selected_deposit_subproject_from)
+        console.log("to: ", this.selected_deposit_subproject_to)
+        console.log("amount: ", this.deposit_sub_amount)
+        var sub_doc = this.sub_project_doc
+        var user_email = this.user_email
+        var deposit_description = this.deposit_description
+        var user_name = this.user_name
+        var user_department = this.user_department
+        var main = this.selected_deposit_mainproject
+        var from = this.selected_deposit_subproject_from
+        var to = this.selected_deposit_subproject_to
+        var amount = parseInt(this.deposit_sub_amount)
+
+        //update from
+        db.collection(sub_doc).doc(from[0]).update({
+              disburse_remain: firebase.firestore.FieldValue.increment(-amount),
+              budget_remain: firebase.firestore.FieldValue.increment(-amount),
+              expense_remain: firebase.firestore.FieldValue.increment(-amount),
+              withdraw:firebase.firestore.FieldValue.increment(amount)
+        })
+        //update to 
+        db.collection(sub_doc).doc(to[0]).update({
+              budget_remain: firebase.firestore.FieldValue.increment(amount),
+              deposit: firebase.firestore.FieldValue.increment(amount),
+              expense_remain: firebase.firestore.FieldValue.increment(amount),
+              disburse_remain: firebase.firestore.FieldValue.increment(amount),
+        })
+        // update main project
+        db.collection("projects").doc(main[0]).update({
+              withdraw: firebase.firestore.FieldValue.increment(amount),
+              deposit: firebase.firestore.FieldValue.increment(amount),
+        })        
+                 db.collection("old_transaction_activities").add({
+                  time:firebase.firestore.FieldValue.serverTimestamp(),
+                  user_name: user_name,
+                  type: "oldSub",
+                  user_email: user_email,
+                  user_department: user_department,
+                  project_name:main[2],
+                  from_project: from[2],
+                  to_project: to[1],
+                  amount: parseInt(amount),
+                  description: deposit_description
+                })
+                .then(function(docRef) {
+                    console.log("depositing between sub projects log written with ID: ", docRef.id);
+                })
+                .catch(function(error) {
+                    console.error("Error depositing Log: ", error);
+                });
+      },
+      deposit_budget_submain(){
+        var main = this.selected_deposit_mainsub
+        var to = this.selected_deposit_submain_to
+        var amount = parseInt(this.deposit_amount)
+        var desp = this.deposit_description
+        var sub_doc = this.sub_project_doc
+        var subRef = db.collection(sub_doc).doc(to[0]);
+        var user_email = this.user_email
+        var deposit_description = this.deposit_description
+        var user_name = this.user_name
+        var user_department = this.user_department
+        // update from 
+        db.collection("projects").doc(main[0]).update({
+              withdraw: firebase.firestore.FieldValue.increment(amount),
+              budget_remain: firebase.firestore.FieldValue.increment(-amount),
+              expense_remain: firebase.firestore.FieldValue.increment(-amount),
+              disburse_remain: firebase.firestore.FieldValue.increment(-amount)
+      })
+        // update to 
+         db.collection(sub_doc).doc(to[0]).update({
+              deposit: firebase.firestore.FieldValue.increment(amount),
+              budget_remain: firebase.firestore.FieldValue.increment(amount),
+              expense_remain: firebase.firestore.FieldValue.increment(amount),
+              disburse_remain: firebase.firestore.FieldValue.increment(amount)
+      })
+      // update to (main project)
+        subRef.get().then(function(doc) {
+            if (doc.exists) {
+                var project_id = doc.data().project_id
+                db.collection("projects").doc(project_id).update({
+                deposit: firebase.firestore.FieldValue.increment(amount),
+                budget_remain: firebase.firestore.FieldValue.increment(amount),
+                expense_remain: firebase.firestore.FieldValue.increment(amount),
+                disburse_remain: firebase.firestore.FieldValue.increment(amount)              
+                })
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+            }
+        })
+                 db.collection("old_transaction_activities").add({
+                  time:firebase.firestore.FieldValue.serverTimestamp(),
+                  user_name: user_name,
+                  type: "oldsubmain",
+                  user_email: user_email,
+                  user_department: user_department,
+                  from_project: main[2],
+                  to_project: to[2],
+                  amount: parseInt(amount),
+                  description: deposit_description
+                })
+                .then(function(docRef) {
+                    console.log("depositing between sub and main log written with ID: ", docRef.id);
+                })
+                .catch(function(error) {
+                    console.error("Error depositing Log: ", error);
+                });                      
+
+    }
   },
   mounted() {
     var id = this
-      if(firebase.auth().currentUser){
+     
+  },
+  created(){
+     if(firebase.auth().currentUser){
         this.isLoggined = true;
         this.currentUser = firebase.auth().currentUser.email;
         this.user = this.currentUser
-        db.collection("users").get().then(function(querySnapshot){
-          querySnapshot.forEach(function(doc){
-        // doc.data() is never undefined for query doc snapshots
-              if(doc.data().email == firebase.auth().currentUser.email){
-                id.deptID = doc.data().dept_id
-              id.user_name = doc.data().name
-              id.user_email = doc.data().email
-              id.user_department = doc.data().deptname
-                if(id.deptID == 0 || parseInt(id.deptID) == 0){
+        console.log(this.currentUser)
+
+        db.collection("users").get().then(
+          querySnapshot => {
+            querySnapshot.forEach(doc=>{
+              if(doc.data().email == this.user){
+                this.deptID = doc.data().dept_id
+                this.user_name = doc.data().name
+                this.user_email = doc.data().email
+                this.user_department = doc.data().deptname
+            if(this.deptID == 0 || parseInt(this.deptID) == 0){
                   console.log("EE")
-                  id.sub_project_doc = "ee_subproject"
+                  this.sub_project_doc = "ee_subproject"
                       db.collection('projects').get().then(
                       querySnapshot => {
                         //  console.log(querySnapshot)
                         querySnapshot.forEach(doc => {
                           // this.pp.push(doc.data())
-                          if(parseInt(doc.data().dept_id) == id.deptID && (doc.data().isFinish == false) ){
+                          if(parseInt(doc.data().dept_id) == this.deptID && (doc.data().isFinish == false) ){
                             var main_id = doc.id                            
-                            id.projects.push({
+                            this.projects.push({
                               ...doc.data(), 
                               id : doc.id,
                               'text' : doc.data().project_name,
-                              'value': [doc.id,doc.data().project_name]
+                              'value': [doc.id,doc.data().project_name,doc.data().disburse_remain]
                               })
                           }
-                          else if(parseInt(doc.data().dept_id) == id.deptID && (doc.data().isFinish == true)){
-                            id.finish_projects.push({
+                          else if(parseInt(doc.data().dept_id) == this.deptID && (doc.data().isFinish == true)){
+                            this.finish_projects.push({
                               ...doc.data(), 
                               id : doc.id
                               ,
                               'text' : doc.data().project_name,
-                              'value': [doc.id,doc.data().budget_remain,doc.data().project_name]
+                              'value': [doc.id,doc.data().disburse_remain,doc.data().project_name]
                               })
                           }
                           
@@ -992,40 +1381,42 @@ export default {
                       db.collection('ee_subproject').get().then(
                         querySnapshot =>{
                           querySnapshot.forEach(doc => {
-                            id.sub_project.push({
+                            this.sub_project.push({
                               ...doc.data(),
                               id : doc.id
                               ,
                               'text' : doc.data().sub_name,
-                              'value': [doc.id,doc.data().sub_name]
+                              'value': [doc.id,doc.data().disburse_remain,doc.data().sub_name]
                             })
+
                           })
                         }
                       )
-                }else if (id.deptID == 1 || parseInt(id.deptID )==1 ){
+         }
+         else if (this.deptID == 1 || parseInt(this.deptID )==1 ){
                   console.log("CE")
-                  id.sub_project_doc = "ce_subproject"
+                  this.sub_project_doc = "ce_subproject"
                       db.collection('projects').get().then(
                       querySnapshot => {
                         //  console.log(querySnapshot)
                         querySnapshot.forEach(doc => {
                           // this.pp.push(doc.data())
-                          if(parseInt(doc.data().dept_id) == id.deptID && (doc.data().isFinish == false) ){
+                          if(parseInt(doc.data().dept_id) == this.deptID && (doc.data().isFinish == false) ){
                             var main_id = doc.id                            
-                            id.projects.push({
+                            this.projects.push({
                               ...doc.data(), 
                               id : doc.id,
                               'text' : doc.data().project_name,
-                              'value': [doc.id,doc.data().project_name]
+                              'value': [doc.id,doc.data().project_name,doc.data().disburse_remain]
                               })
                           }
-                          else if(parseInt(doc.data().dept_id) == id.deptID && (doc.data().isFinish == true)){
-                            id.finish_projects.push({
+                          else if(parseInt(doc.data().dept_id) == this.deptID && (doc.data().isFinish == true)){
+                            this.finish_projects.push({
                               ...doc.data(), 
                               id : doc.id
                               ,
                               'text' : doc.data().project_name,
-                              'value': [doc.id,doc.data().budget_remain,doc.data().project_name]
+                              'value': [doc.id,doc.data().disburse_remain,doc.data().project_name]
                               })
                           }
                           
@@ -1034,41 +1425,42 @@ export default {
                       db.collection('ce_subproject').get().then(
                         querySnapshot =>{
                           querySnapshot.forEach(doc => {
-                            id.sub_project.push({
+                            this.sub_project.push({
                               ...doc.data(),
                               id : doc.id
                               ,
                               'text' : doc.data().sub_name,
-                              'value': [doc.id,doc.data().sub_name]
+                              'value': [doc.id,doc.data().disburse_remain,doc.data().sub_name]
                             })
+
                           })
                         }
                       )
                 }
-                }else if (id.deptID == 2 || parseInt(id.deptID )==2 ){
+                else if (this.deptID == 2 || parseInt(this.deptID )==2 ){
                   console.log("AE")
-                  id.sub_project_doc = "ae_subproject"
+                  this.sub_project_doc = "ae_subproject"
                       db.collection('projects').get().then(
                       querySnapshot => {
                         //  console.log(querySnapshot)
                         querySnapshot.forEach(doc => {
                           // this.pp.push(doc.data())
-                          if(parseInt(doc.data().dept_id) == id.deptID && (doc.data().isFinish == false) ){
+                          if(parseInt(doc.data().dept_id) == this.deptID && (doc.data().isFinish == false) ){
                             var main_id = doc.id                            
-                            id.projects.push({
+                            this.projects.push({
                               ...doc.data(), 
                               id : doc.id,
                               'text' : doc.data().project_name,
-                              'value': [doc.id,doc.data().project_name]
+                              'value': [doc.id,doc.data().project_name,doc.data().disburse_remain]
                               })
                           }
-                          else if(parseInt(doc.data().dept_id) == id.deptID && (doc.data().isFinish == true)){
-                            id.finish_projects.push({
+                          else if(parseInt(doc.data().dept_id) == this.deptID && (doc.data().isFinish == true)){
+                            this.finish_projects.push({
                               ...doc.data(), 
                               id : doc.id
                               ,
                               'text' : doc.data().project_name,
-                              'value': [doc.id,doc.data().budget_remain,doc.data().project_name]
+                              'value': [doc.id,doc.data().disburse_remain,doc.data().project_name]
                               })
                           }
                           
@@ -1077,41 +1469,43 @@ export default {
                       db.collection('ae_subproject').get().then(
                         querySnapshot =>{
                           querySnapshot.forEach(doc => {
-                            id.sub_project.push({
+                            this.sub_project.push({
                               ...doc.data(),
                               id : doc.id
                               ,
                               'text' : doc.data().sub_name,
-                              'value': [doc.id,doc.data().sub_name]
+                              'value': [doc.id,doc.data().disburse_remain,doc.data().sub_name]
                             })
+
                           })
                         }
                       )
-                }else if (id.deptID == 3 || parseInt(id.deptID )==3){
-                  id.sub_project_doc = "ie_subproject"
+                }
+                else if (this.deptID == 3 || parseInt(this.deptID )==3){
+                  this.sub_project_doc = "ie_subproject"
 
                   console.log("IE")
-                       db.collection('projects').get().then(
+                      db.collection('projects').get().then(
                       querySnapshot => {
                         //  console.log(querySnapshot)
                         querySnapshot.forEach(doc => {
                           // this.pp.push(doc.data())
-                          if(parseInt(doc.data().dept_id) == id.deptID && (doc.data().isFinish == false) ){
+                          if(parseInt(doc.data().dept_id) == this.deptID && (doc.data().isFinish == false) ){
                             var main_id = doc.id                            
-                            id.projects.push({
+                            this.projects.push({
                               ...doc.data(), 
                               id : doc.id,
                               'text' : doc.data().project_name,
-                              'value': [doc.id,doc.data().project_name]
+                              'value': [doc.id,doc.data().project_name,doc.data().disburse_remain]
                               })
                           }
-                          else if(parseInt(doc.data().dept_id) == id.deptID && (doc.data().isFinish == true)){
-                            id.finish_projects.push({
+                          else if(parseInt(doc.data().dept_id) == this.deptID && (doc.data().isFinish == true)){
+                            this.finish_projects.push({
                               ...doc.data(), 
                               id : doc.id
                               ,
                               'text' : doc.data().project_name,
-                              'value': [doc.id,doc.data().budget_remain,doc.data().project_name]
+                              'value': [doc.id,doc.data().disburse_remain,doc.data().project_name]
                               })
                           }
                           
@@ -1120,19 +1514,20 @@ export default {
                       db.collection('ie_subproject').get().then(
                         querySnapshot =>{
                           querySnapshot.forEach(doc => {
-                            id.sub_project.push({
+                            this.sub_project.push({
                               ...doc.data(),
                               id : doc.id
                               ,
                               'text' : doc.data().sub_name,
-                              'value': [doc.id,doc.data().sub_name]
+                              'value': [doc.id,doc.data().disburse_remain,doc.data().sub_name]
                             })
+
                           })
                         }
                       )
                 }
-                else if (id.deptID == 4 || parseInt(id.deptID )==4){
-                  id.sub_project_doc = "me_subproject"
+else if (this.deptID == 4 || parseInt(this.deptID )==4){
+                  this.sub_project_doc = "me_subproject"
 
                   console.log("ME")
                       db.collection('projects').get().then(
@@ -1140,22 +1535,22 @@ export default {
                         //  console.log(querySnapshot)
                         querySnapshot.forEach(doc => {
                           // this.pp.push(doc.data())
-                          if(parseInt(doc.data().dept_id) == id.deptID && (doc.data().isFinish == false) ){
+                          if(parseInt(doc.data().dept_id) == this.deptID && (doc.data().isFinish == false) ){
                             var main_id = doc.id                            
-                            id.projects.push({
+                            this.projects.push({
                               ...doc.data(), 
                               id : doc.id,
                               'text' : doc.data().project_name,
-                              'value': [doc.id,doc.data().project_name]
+                              'value': [doc.id,doc.data().project_name,doc.data().disburse_remain]
                               })
                           }
-                          else if(parseInt(doc.data().dept_id) == id.deptID && (doc.data().isFinish == true)){
-                            id.finish_projects.push({
+                          else if(parseInt(doc.data().dept_id) == this.deptID && (doc.data().isFinish == true)){
+                            this.finish_projects.push({
                               ...doc.data(), 
                               id : doc.id
                               ,
                               'text' : doc.data().project_name,
-                              'value': [doc.id,doc.data().budget_remain,doc.data().project_name]
+                              'value': [doc.id,doc.data().disburse_remain,doc.data().project_name]
                               })
                           }
                           
@@ -1164,42 +1559,43 @@ export default {
                       db.collection('me_subproject').get().then(
                         querySnapshot =>{
                           querySnapshot.forEach(doc => {
-                            id.sub_project.push({
+                            this.sub_project.push({
                               ...doc.data(),
                               id : doc.id
                               ,
                               'text' : doc.data().sub_name,
-                              'value': [doc.id,doc.data().sub_name]
+                              'value': [doc.id,doc.data().disburse_remain,doc.data().sub_name]
                             })
+
                           })
                         }
                       )
-                }                
-                else if (id.deptID == 5 || parseInt(id.deptID )==5){
-                  id.sub_project_doc = "env_subproject"
+                }
+                else if (this.deptID == 5 || parseInt(this.deptID )==5){
+                  this.sub_project_doc = "env_subproject"
 
                   console.log("ENVI")
-                       db.collection('projects').get().then(
+                      db.collection('projects').get().then(
                       querySnapshot => {
                         //  console.log(querySnapshot)
                         querySnapshot.forEach(doc => {
                           // this.pp.push(doc.data())
-                          if(parseInt(doc.data().dept_id) == id.deptID && (doc.data().isFinish == false) ){
+                          if(parseInt(doc.data().dept_id) == this.deptID && (doc.data().isFinish == false) ){
                             var main_id = doc.id                            
-                            id.projects.push({
+                            this.projects.push({
                               ...doc.data(), 
                               id : doc.id,
                               'text' : doc.data().project_name,
-                              'value': [doc.id,doc.data().project_name]
+                              'value': [doc.id,doc.data().project_name,doc.data().disburse_remain]
                               })
                           }
-                          else if(parseInt(doc.data().dept_id) == id.deptID && (doc.data().isFinish == true)){
-                            id.finish_projects.push({
+                          else if(parseInt(doc.data().dept_id) == this.deptID && (doc.data().isFinish == true)){
+                            this.finish_projects.push({
                               ...doc.data(), 
                               id : doc.id
                               ,
                               'text' : doc.data().project_name,
-                              'value': [doc.id,doc.data().budget_remain,doc.data().project_name]
+                              'value': [doc.id,doc.data().disburse_remain,doc.data().project_name]
                               })
                           }
                           
@@ -1208,42 +1604,43 @@ export default {
                       db.collection('env_subproject').get().then(
                         querySnapshot =>{
                           querySnapshot.forEach(doc => {
-                            id.sub_project.push({
+                            this.sub_project.push({
                               ...doc.data(),
                               id : doc.id
                               ,
                               'text' : doc.data().sub_name,
-                              'value': [doc.id,doc.data().sub_name]
+                              'value': [doc.id,doc.data().disburse_remain,doc.data().sub_name]
                             })
+
                           })
                         }
                       )
-                }
-                else if (id.deptID == 6 || parseInt(id.deptID )==6){
-                  id.sub_project_doc = "che_subproject"
+                }                
+else if (this.deptID == 6 || parseInt(this.deptID )==6){
+                  this.sub_project_doc = "che_subproject"
 
                   console.log("CHEM")
-                       db.collection('projects').get().then(
+                      db.collection('projects').get().then(
                       querySnapshot => {
                         //  console.log(querySnapshot)
                         querySnapshot.forEach(doc => {
                           // this.pp.push(doc.data())
-                          if(parseInt(doc.data().dept_id) == id.deptID && (doc.data().isFinish == false) ){
+                          if(parseInt(doc.data().dept_id) == this.deptID && (doc.data().isFinish == false) ){
                             var main_id = doc.id                            
-                            id.projects.push({
+                            this.projects.push({
                               ...doc.data(), 
                               id : doc.id,
                               'text' : doc.data().project_name,
-                              'value': [doc.id,doc.data().project_name]
+                              'value': [doc.id,doc.data().project_name,doc.data().disburse_remain]
                               })
                           }
-                          else if(parseInt(doc.data().dept_id) == id.deptID && (doc.data().isFinish == true)){
-                            id.finish_projects.push({
+                          else if(parseInt(doc.data().dept_id) == this.deptID && (doc.data().isFinish == true)){
+                            this.finish_projects.push({
                               ...doc.data(), 
                               id : doc.id
                               ,
                               'text' : doc.data().project_name,
-                              'value': [doc.id,doc.data().budget_remain,doc.data().project_name]
+                              'value': [doc.id,doc.data().disburse_remain,doc.data().project_name]
                               })
                           }
                           
@@ -1252,42 +1649,43 @@ export default {
                       db.collection('che_subproject').get().then(
                         querySnapshot =>{
                           querySnapshot.forEach(doc => {
-                            id.sub_project.push({
+                            this.sub_project.push({
                               ...doc.data(),
                               id : doc.id
                               ,
                               'text' : doc.data().sub_name,
-                              'value': [doc.id,doc.data().sub_name]
+                              'value': [doc.id,doc.data().disburse_remain,doc.data().sub_name]
                             })
+
                           })
                         }
                       )
-                }    
-                else if (id.deptID == 7 || parseInt(id.deptID )==7){
+                }
+               else if (this.deptID == 7 || parseInt(this.deptID )==7){
                   console.log("COE")
-                  id.sub_project_doc = "coe_subproject"
+                  this.sub_project_doc = "coe_subproject"
 
                       db.collection('projects').get().then(
                       querySnapshot => {
                         //  console.log(querySnapshot)
                         querySnapshot.forEach(doc => {
                           // this.pp.push(doc.data())
-                          if(parseInt(doc.data().dept_id) == id.deptID && (doc.data().isFinish == false) ){
+                          if(parseInt(doc.data().dept_id) == this.deptID && (doc.data().isFinish == false) ){
                             var main_id = doc.id                            
-                            id.projects.push({
+                            this.projects.push({
                               ...doc.data(), 
                               id : doc.id,
                               'text' : doc.data().project_name,
-                              'value': [doc.id,doc.data().project_name]
+                              'value': [doc.id,doc.data().project_name,doc.data().disburse_remain]
                               })
                           }
-                          else if(parseInt(doc.data().dept_id) == id.deptID && (doc.data().isFinish == true)){
-                            id.finish_projects.push({
+                          else if(parseInt(doc.data().dept_id) == this.deptID && (doc.data().isFinish == true)){
+                            this.finish_projects.push({
                               ...doc.data(), 
                               id : doc.id
                               ,
                               'text' : doc.data().project_name,
-                              'value': [doc.id,doc.data().budget_remain,doc.data().project_name]
+                              'value': [doc.id,doc.data().disburse_remain,doc.data().project_name]
                               })
                           }
                           
@@ -1296,22 +1694,25 @@ export default {
                       db.collection('coe_subproject').get().then(
                         querySnapshot =>{
                           querySnapshot.forEach(doc => {
-                            id.sub_project.push({
+                            this.sub_project.push({
                               ...doc.data(),
                               id : doc.id
                               ,
                               'text' : doc.data().sub_name,
-                              'value': [doc.id,doc.data().sub_name]
+                              'value': [doc.id,doc.data().disburse_remain,doc.data().sub_name]
                             })
+
                           })
                         }
                       )
-                }          
-          })
-        })
-      }
-  },
-  created(){
+                }                                
+              }
+            })
+          }
+        )
+     }
+       
+        
      db.collection('strategicissues').get().then(
       querySnapshot => {
         querySnapshot.forEach(doc => {
