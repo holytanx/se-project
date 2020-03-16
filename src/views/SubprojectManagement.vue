@@ -639,6 +639,18 @@ export default {
             console.error("Error adding document: ", error);
         });
 
+        //add to action history
+        db.collection('action_activities').add({
+            sub_project: this.add_sub_name,
+            type: 'เพิ่ม',
+            user: firebase.auth().currentUser
+        })
+        .then(function(docRef) {
+            console.log("เก็บเข้าประวัติแล้ว ID: ", docRef.id);
+        })
+        .catch(function(error) {
+            console.error("Error adding document: ", error);
+        });
       },
       deposit_budget(){
         console.log(this.selected_finish_project)
@@ -664,7 +676,15 @@ export default {
           budget_remain: parseInt(finish_project_budget)-deposit_amount,
           withdraw:firebase.firestore.FieldValue.increment(deposit_amount)
 
-        })         
+        })
+        db.collection("action_activities").add({
+          amount: deposit_amount,
+          from_project: finish_project_id,
+          to_project: target_project_id,
+          user: firebase.auth().currentUser,
+          time: Date.now()
+        })     
+        console.log('add to action_activities'+ deposit_amount + finish_project_id + target_project_id)
         this.dialog_deposit = false
       }
   },

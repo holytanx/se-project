@@ -130,6 +130,7 @@ export default {
           { title: 'หน้าหลัก', icon: 'mdi-view-dashboard' ,link:"/regulardashboard"},
           { title: 'จัดการโครงการ (เพิ่ม/ลบ/แก้ไข)', icon: 'mdi-layers-search' ,link:"/subprojectmanagement"},
           { title: 'ประวัติย้อนหลังโครงการ', icon: 'mdi-history',link:"/subprojecthistory" },
+          { title: 'ประวัติจัดการโครงการ (โอน/เพิ่มลด/ขออนุญาติ)',link:"/actionhistory" }
         ],
         color: 'indigo',
         right: false,

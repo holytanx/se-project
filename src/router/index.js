@@ -7,10 +7,10 @@ import DeanDashboard from "../views/DeanDashboard"
 import DeanTotalBudget from"../views/DeanTotalBudget"
 import AdminDashboard from "../views/AdminDashboard"
 import RegularDashboard from "../views/RegularDashboard"
-import BudgetManaget from "../views/BudgetManaget"
 import MembersManagement from "../views/MembersManagement";
 import SubprojectManagement from '@/views/SubprojectManagement';
 import SubprojectHistory from '@/views/SubprojectHistory';
+import SubprojectActionHistory from '../views/SubprojectActionHistory';
 import firebase from "firebase";
 import {db} from '../main';
 
@@ -98,9 +98,9 @@ const routes = [
     }
   },
   {
-    path: "/budgetmanaget",
-    name: "BudgetManaget",
-    component: BudgetManaget,
+    path: "/actionhistory",
+    name: "SubprojectActionHistory",
+    component: SubprojectActionHistory,
     meta: {
       requiredAuth:true
     }
