@@ -25,7 +25,7 @@
         </v-data-table>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="red" text @click="view = false">EXIT</v-btn>
+            <v-btn color="red" text @click="viewExit">EXIT</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -395,8 +395,6 @@ import { counter } from '@fortawesome/fontawesome-svg-core';
         querySnapshot.forEach(doc => {
           if(doc.data().isFinish == false){
           var filteredDept = this.filterdeptName(doc.data().dept_id);
-          var subfilteredDept = this.sub_filterdeptName(doc.data().dept_id);
-          console.log(subfilteredDept)
           console.log(filteredDept)
           const data ={
             ...doc.data(),
@@ -404,8 +402,24 @@ import { counter } from '@fortawesome/fontawesome-svg-core';
             deptname: filteredDept,
           }
           this.projects.push(data)
-          db.collection(subfilteredDept).get().then(
-                querySnapshot => {
+          
+          }
+        }
+        )
+      }
+    )
+    },
+
+    methods: {
+      viewItem (item) {
+        this.view = true
+        db.collection('projects').doc(item.id).get().then(
+            doc => {
+              if(doc.data().isFinish == false){
+                var subfilteredDept = this.sub_filterdeptName(doc.data().dept_id);
+                console.log(subfilteredDept)
+                db.collection(subfilteredDept).get().then(
+                  querySnapshot => {
                   querySnapshot.forEach(doc => {
                     if(doc.data().isFinish == false){
                     const subdata ={
@@ -418,17 +432,13 @@ import { counter } from '@fortawesome/fontawesome-svg-core';
                     )
                   }
                 )
-          
-          }
-        }
+              }
+            }
         )
-      }
-    )
-    },
-
-    methods: {
-      viewItem (item) {
-        this.view = true
+      },
+      viewExit(item){
+        this.view = false
+        this.sub_project = []
       },
       editItem (item) {
         this.editedIndex = this.projects.indexOf(item)
