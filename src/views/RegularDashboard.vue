@@ -133,7 +133,7 @@ export default {
                     querySnapshot.forEach(docs => {
                       // this.pp.push(doc.data())
                       var budget = parseInt(docs.data().budget);
-                      var budget_remain = parseInt(docs.data().budget_remain);
+                      var budget_remain = parseInt(docs.data().expense_remain);
                       if (isNaN(budget)) {
                         budget = 0;
                         sum1 += budget;
@@ -173,7 +173,7 @@ export default {
                   querySnapshot.forEach(docs => {
                     // this.pp.push(doc.data())
                     var budget = parseInt(docs.data().budget);
-                    var budget_remain = parseInt(docs.data().budget_remain);
+                    var budget_remain = parseInt(docs.data().expense_remain);
                     if (isNaN(budget)) {
                       budget = 0;
                       sum3 += budget;
@@ -212,7 +212,7 @@ export default {
                   querySnapshot.forEach(docs => {
                     // this.pp.push(doc.data())
                     var budget = parseInt(docs.data().budget);
-                    var budget_remain = parseInt(docs.data().budget_remain);
+                    var budget_remain = parseInt(docs.data().expense_remain);
                     if (isNaN(budget)) {
                       budget = 0;
                       sum5 += budget;
@@ -251,7 +251,7 @@ export default {
                   querySnapshot.forEach(docs => {
                     // this.pp.push(doc.data())
                     var budget = parseInt(docs.data().budget);
-                    var budget_remain = parseInt(docs.data().budget_remain);
+                    var budget_remain = parseInt(docs.data().expense_remain);
                     if (isNaN(budget)) {
                       budget = 0;
                       sum7 += budget;
@@ -290,7 +290,7 @@ export default {
                   querySnapshot.forEach(docs => {
                     // this.pp.push(doc.data())
                     var budget = parseInt(docs.data().budget);
-                    var budget_remain = parseInt(docs.data().budget_remain);
+                    var budget_remain = parseInt(docs.data().expense_remain);
                     if (isNaN(budget)) {
                       budget = 0;
                       sum9 += budget;
@@ -329,7 +329,7 @@ export default {
                   querySnapshot.forEach(docs => {
                     // this.pp.push(doc.data())
                     var budget = parseInt(docs.data().budget);
-                    var budget_remain = parseInt(docs.data().budget_remain);
+                    var budget_remain = parseInt(docs.data().expense_remain);
                     if (isNaN(budget)) {
                       budget = 0;
                       sum11 += budget;
@@ -368,7 +368,7 @@ export default {
                   querySnapshot.forEach(docs => {
                     // this.pp.push(doc.data())
                     var budget = parseInt(docs.data().budget);
-                    var budget_remain = parseInt(docs.data().budget_remain);
+                    var budget_remain = parseInt(docs.data().expense_remain);
                     if (isNaN(budget)) {
                       budget = 0;
                       sum13 += budget;
@@ -407,7 +407,7 @@ export default {
                   querySnapshot.forEach(docs => {
                     // this.pp.push(doc.data())
                     var budget = parseInt(docs.data().budget);
-                    var budget_remain = parseInt(docs.data().budget_remain);
+                    var budget_remain = parseInt(docs.data().expense_remain);
                     if (isNaN(budget)) {
                       budget = 0;
                       sum15 += budget;

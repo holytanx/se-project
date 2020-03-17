@@ -4,31 +4,6 @@
       <div class="row">
           <div class="col">
             <h3>เพิ่มสมาชิก</h3>
-            <!-- <form  class="col s12">
-                <div class="row">
-              <div class="input-field col s12">
-                <label>Email</label>
-                <input type="email" id="email" v-model="email" required />
-              </div>
-              </div>
-                <div class="row">
-              <div class="input-field col s12">
-                <label>Password</label>
-                <input type="password" id="password" v-model="password" required />
-              </div>
-              </div>
-              <div>
-              <b>สาขาวิชา/ฝ่าย/ตำแหน่ง</b>
-               <b-form-select v-model="selected" :options="departments" class="mb-3">
-                <template v-slot:first>
-                  <b-form-select-option :value="null" disabled>-- กรุณาเลือกสาขาวิชา/ฝ่าย/ตำแหน่งของสมาชิกที่ต้องการเพิ่ม --</b-form-select-option>
-                </template>
-              </b-form-select>
-                  <div class="mt-3">Selected: <strong>{{ selected }}</strong></div>
-              </div>
-                <b-button @click="registerAuth()+addMember()" variant="success">เพิ่ม</b-button>
-                <b-button  variant="danger"><router-link to="/">ยกเลิก</router-link></b-button>
-            </form> -->
             <form>
               <v-text-field
                 v-model="email"
