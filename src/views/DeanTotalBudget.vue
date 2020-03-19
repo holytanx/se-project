@@ -107,8 +107,8 @@ export default {
 
     db.collection("projects").get().then(querySnapshot => {
       querySnapshot.forEach(docs => {
-        var budget = parseInt(docs.data().budget);
-        var budget_remain = parseInt(docs.data().budget_remain);
+        var budget = parseInt(docs.data().budget_remain);
+        var budget_remain = parseInt(docs.data().expense_remain);
         if (docs.data().dept_id == 0) {
           sum_eeProject = sum_eeProject + 1;
           num_ee.innerHTML = sum_eeProject;
@@ -167,278 +167,278 @@ export default {
       });
     });
 
-    db.collection("ee_subproject").get().then(querySnapshot => {
-      querySnapshot.forEach(docs => {
-        var budget = parseInt(docs.data().budget);
-        var budget_remain = parseInt(docs.data().budget_remain);
-        if (docs.data().isFinish == false) {
-          nums1 = nums1 + 1;
-          sum_eeProject = sum_eeProject + 1;
-          num_inprogress.innerHTML = nums1;
-          num_ee.innerHTML = sum_eeProject;
-        } else if (docs.data().isFinish == true) {
-          nums2 = nums2 + 1;
-          sum_eeProject = sum_eeProject + 1;
-          num_finished.innerHTML = nums2;
-          num_ee.innerHTML = sum_eeProject;
-        }
-        if (isNaN(budget)) {
-          budget = 0;
-          sum1 += budget;
-          totalBudget.innerHTML = sum1;         
-        } else {
-          sum1 += budget;
-          totalBudget.innerHTML = sum1;
-        }
-        if (isNaN(budget_remain)) {
-          budget_remain = 0;
-          sum2 += budget_remain;
-          totalRemainbudget.innerHTML = sum2;
-        } else {
-          sum2 += budget_remain;
-          totalRemainbudget.innerHTML = sum2;
-        }
-      });
-    });
+    // db.collection("ee_subproject").get().then(querySnapshot => {
+    //   querySnapshot.forEach(docs => {
+    //     var budget = parseInt(docs.data().budget);
+    //     var budget_remain = parseInt(docs.data().budget_remain);
+    //     if (docs.data().isFinish == false) {
+    //       nums1 = nums1 + 1;
+    //       sum_eeProject = sum_eeProject + 1;
+    //       num_inprogress.innerHTML = nums1;
+    //       num_ee.innerHTML = sum_eeProject;
+    //     } else if (docs.data().isFinish == true) {
+    //       nums2 = nums2 + 1;
+    //       sum_eeProject = sum_eeProject + 1;
+    //       num_finished.innerHTML = nums2;
+    //       num_ee.innerHTML = sum_eeProject;
+    //     }
+    //     if (isNaN(budget)) {
+    //       budget = 0;
+    //       sum1 += budget;
+    //       totalBudget.innerHTML = sum1;         
+    //     } else {
+    //       sum1 += budget;
+    //       totalBudget.innerHTML = sum1;
+    //     }
+    //     if (isNaN(budget_remain)) {
+    //       budget_remain = 0;
+    //       sum2 += budget_remain;
+    //       totalRemainbudget.innerHTML = sum2;
+    //     } else {
+    //       sum2 += budget_remain;
+    //       totalRemainbudget.innerHTML = sum2;
+    //     }
+    //   });
+    // });
     
-    db.collection("ce_subproject").get().then(querySnapshot => {
-      querySnapshot.forEach(docs => {
-        var budget = parseInt(docs.data().budget);
-        var budget_remain = parseInt(docs.data().budget_remain);
-        if (docs.data().isFinish == false) {
-          nums1 = nums1 + 1;
-          sum_ceProject = sum_ceProject + 1;
-          num_inprogress.innerHTML = nums1;
-          num_ce.innerHTML = sum_ceProject;
-        } else if (docs.data().isFinish == true) {
-          nums2 = nums2 + 1;
-          sum_ceProject = sum_ceProject + 1;
-          num_finished.innerHTML = nums2;
-          num_ce.innerHTML = sum_ceProject;
-        }
-        if (isNaN(budget)) {
-          budget = 0;
-          sum1 += budget;
-          totalBudget.innerHTML = sum1;         
-        } else {
-          sum1 += budget;
-          totalBudget.innerHTML = sum1;
-        }
-        if (isNaN(budget_remain)) {
-          budget_remain = 0;
-          sum2 += budget_remain;
-          totalRemainbudget.innerHTML = sum2;
-        } else {
-          sum2 += budget_remain;
-          totalRemainbudget.innerHTML = sum2;
-        }
-      });
-    });
+    // db.collection("ce_subproject").get().then(querySnapshot => {
+    //   querySnapshot.forEach(docs => {
+    //     var budget = parseInt(docs.data().budget);
+    //     var budget_remain = parseInt(docs.data().budget_remain);
+    //     if (docs.data().isFinish == false) {
+    //       nums1 = nums1 + 1;
+    //       sum_ceProject = sum_ceProject + 1;
+    //       num_inprogress.innerHTML = nums1;
+    //       num_ce.innerHTML = sum_ceProject;
+    //     } else if (docs.data().isFinish == true) {
+    //       nums2 = nums2 + 1;
+    //       sum_ceProject = sum_ceProject + 1;
+    //       num_finished.innerHTML = nums2;
+    //       num_ce.innerHTML = sum_ceProject;
+    //     }
+    //     if (isNaN(budget)) {
+    //       budget = 0;
+    //       sum1 += budget;
+    //       totalBudget.innerHTML = sum1;         
+    //     } else {
+    //       sum1 += budget;
+    //       totalBudget.innerHTML = sum1;
+    //     }
+    //     if (isNaN(budget_remain)) {
+    //       budget_remain = 0;
+    //       sum2 += budget_remain;
+    //       totalRemainbudget.innerHTML = sum2;
+    //     } else {
+    //       sum2 += budget_remain;
+    //       totalRemainbudget.innerHTML = sum2;
+    //     }
+    //   });
+    // });
     
-    db.collection("ae_subproject").get().then(querySnapshot => {
-      querySnapshot.forEach(docs => {
-        var budget = parseInt(docs.data().budget);
-        var budget_remain = parseInt(docs.data().budget_remain);
-        if (docs.data().isFinish == false) {
-          nums1 = nums1 + 1;
-          sum_aeProject = sum_aeProject + 1;
-          num_inprogress.innerHTML = nums1;
-          num_ae.innerHTML = sum_aeProject;
-        } else if (docs.data().isFinish == true) {
-          nums2 = nums2 + 1;
-          sum_aeProject = sum_aeProject + 1;
-          num_finished.innerHTML = nums2;
-          num_ae.innerHTML = sum_aeProject;
-        }
-        if (isNaN(budget)) {
-          budget = 0;
-          sum1 += budget;
-          totalBudget.innerHTML = sum1;         
-        } else {
-          sum1 += budget;
-          totalBudget.innerHTML = sum1;
-        }
-        if (isNaN(budget_remain)) {
-          budget_remain = 0;
-          sum2 += budget_remain;
-          totalRemainbudget.innerHTML = sum2;
-        } else {
-          sum2 += budget_remain;
-          totalRemainbudget.innerHTML = sum2;
-        }
-      });
-    });
+    // db.collection("ae_subproject").get().then(querySnapshot => {
+    //   querySnapshot.forEach(docs => {
+    //     var budget = parseInt(docs.data().budget);
+    //     var budget_remain = parseInt(docs.data().budget_remain);
+    //     if (docs.data().isFinish == false) {
+    //       nums1 = nums1 + 1;
+    //       sum_aeProject = sum_aeProject + 1;
+    //       num_inprogress.innerHTML = nums1;
+    //       num_ae.innerHTML = sum_aeProject;
+    //     } else if (docs.data().isFinish == true) {
+    //       nums2 = nums2 + 1;
+    //       sum_aeProject = sum_aeProject + 1;
+    //       num_finished.innerHTML = nums2;
+    //       num_ae.innerHTML = sum_aeProject;
+    //     }
+    //     if (isNaN(budget)) {
+    //       budget = 0;
+    //       sum1 += budget;
+    //       totalBudget.innerHTML = sum1;         
+    //     } else {
+    //       sum1 += budget;
+    //       totalBudget.innerHTML = sum1;
+    //     }
+    //     if (isNaN(budget_remain)) {
+    //       budget_remain = 0;
+    //       sum2 += budget_remain;
+    //       totalRemainbudget.innerHTML = sum2;
+    //     } else {
+    //       sum2 += budget_remain;
+    //       totalRemainbudget.innerHTML = sum2;
+    //     }
+    //   });
+    // });
 
-    db.collection("ie_subproject").get().then(querySnapshot => {
-      querySnapshot.forEach(docs => {
-        var budget = parseInt(docs.data().budget);
-        var budget_remain = parseInt(docs.data().budget_remain);
-        if (docs.data().isFinish == false) {
-          nums1 = nums1 + 1;
-          sum_ieProject = sum_ieProject + 1;
-          num_inprogress.innerHTML = nums1;
-          num_ie.innerHTML = sum_ieProject;
-        } else if (docs.data().isFinish == true) {
-          nums2 = nums2 + 1;
-          sum_ieProject = sum_ieProject + 1;
-          num_finished.innerHTML = nums2;
-          num_ie.innerHTML = sum_ieProject;
-        }
-        if (isNaN(budget)) {
-          budget = 0;
-          sum1 += budget;
-          totalBudget.innerHTML = sum1;         
-        } else {
-          sum1 += budget;
-          totalBudget.innerHTML = sum1;
-        }
-        if (isNaN(budget_remain)) {
-          budget_remain = 0;
-          sum2 += budget_remain;
-          totalRemainbudget.innerHTML = sum2;
-        } else {
-          sum2 += budget_remain;
-          totalRemainbudget.innerHTML = sum2;
-        }
-      });
-    });
+    // db.collection("ie_subproject").get().then(querySnapshot => {
+    //   querySnapshot.forEach(docs => {
+    //     var budget = parseInt(docs.data().budget);
+    //     var budget_remain = parseInt(docs.data().budget_remain);
+    //     if (docs.data().isFinish == false) {
+    //       nums1 = nums1 + 1;
+    //       sum_ieProject = sum_ieProject + 1;
+    //       num_inprogress.innerHTML = nums1;
+    //       num_ie.innerHTML = sum_ieProject;
+    //     } else if (docs.data().isFinish == true) {
+    //       nums2 = nums2 + 1;
+    //       sum_ieProject = sum_ieProject + 1;
+    //       num_finished.innerHTML = nums2;
+    //       num_ie.innerHTML = sum_ieProject;
+    //     }
+    //     if (isNaN(budget)) {
+    //       budget = 0;
+    //       sum1 += budget;
+    //       totalBudget.innerHTML = sum1;         
+    //     } else {
+    //       sum1 += budget;
+    //       totalBudget.innerHTML = sum1;
+    //     }
+    //     if (isNaN(budget_remain)) {
+    //       budget_remain = 0;
+    //       sum2 += budget_remain;
+    //       totalRemainbudget.innerHTML = sum2;
+    //     } else {
+    //       sum2 += budget_remain;
+    //       totalRemainbudget.innerHTML = sum2;
+    //     }
+    //   });
+    // });
 
-    db.collection("me_subproject").get().then(querySnapshot => {
-      querySnapshot.forEach(docs => {
-        var budget = parseInt(docs.data().budget);
-        var budget_remain = parseInt(docs.data().budget_remain);
-        if (docs.data().isFinish == false) {
-          nums1 = nums1 + 1;
-          sum_meProject = sum_meProject + 1;
-          num_inprogress.innerHTML = nums1;
-          num_me.innerHTML = sum_meProject;
-        } else if (docs.data().isFinish == true) {
-          nums2 = nums2 + 1;
-          sum_meProject = sum_meProject + 1;
-          num_finished.innerHTML = nums2;
-          num_me.innerHTML = sum_meProject;
-        }
-        if (isNaN(budget)) {
-          budget = 0;
-          sum1 += budget;
-          totalBudget.innerHTML = sum1;         
-        } else {
-          sum1 += budget;
-          totalBudget.innerHTML = sum1;
-        }
-        if (isNaN(budget_remain)) {
-          budget_remain = 0;
-          sum2 += budget_remain;
-          totalRemainbudget.innerHTML = sum2;
-        } else {
-          sum2 += budget_remain;
-          totalRemainbudget.innerHTML = sum2;
-        }
-      });
-    });
+    // db.collection("me_subproject").get().then(querySnapshot => {
+    //   querySnapshot.forEach(docs => {
+    //     var budget = parseInt(docs.data().budget);
+    //     var budget_remain = parseInt(docs.data().budget_remain);
+    //     if (docs.data().isFinish == false) {
+    //       nums1 = nums1 + 1;
+    //       sum_meProject = sum_meProject + 1;
+    //       num_inprogress.innerHTML = nums1;
+    //       num_me.innerHTML = sum_meProject;
+    //     } else if (docs.data().isFinish == true) {
+    //       nums2 = nums2 + 1;
+    //       sum_meProject = sum_meProject + 1;
+    //       num_finished.innerHTML = nums2;
+    //       num_me.innerHTML = sum_meProject;
+    //     }
+    //     if (isNaN(budget)) {
+    //       budget = 0;
+    //       sum1 += budget;
+    //       totalBudget.innerHTML = sum1;         
+    //     } else {
+    //       sum1 += budget;
+    //       totalBudget.innerHTML = sum1;
+    //     }
+    //     if (isNaN(budget_remain)) {
+    //       budget_remain = 0;
+    //       sum2 += budget_remain;
+    //       totalRemainbudget.innerHTML = sum2;
+    //     } else {
+    //       sum2 += budget_remain;
+    //       totalRemainbudget.innerHTML = sum2;
+    //     }
+    //   });
+    // });
 
-    db.collection("env_subproject").get().then(querySnapshot => {
-      querySnapshot.forEach(docs => {
-        var budget = parseInt(docs.data().budget);
-        var budget_remain = parseInt(docs.data().budget_remain);
-        if (docs.data().isFinish == false) {
-          nums1 = nums1 + 1;
-          sum_envProject = sum_envProject + 1;
-          num_inprogress.innerHTML = nums1;
-          num_env.innerHTML = sum_envProject;
-        } else if (docs.data().isFinish == true) {
-          nums2 = nums2 + 1;
-          sum_envProject = sum_envProject + 1;
-          num_finished.innerHTML = nums2;
-          num_env.innerHTML = sum_envProject;
-        }
-        if (isNaN(budget)) {
-          budget = 0;
-          sum1 += budget;
-          totalBudget.innerHTML = sum1;         
-        } else {
-          sum1 += budget;
-          totalBudget.innerHTML = sum1;
-        }
-        if (isNaN(budget_remain)) {
-          budget_remain = 0;
-          sum2 += budget_remain;
-          totalRemainbudget.innerHTML = sum2;
-        } else {
-          sum2 += budget_remain;
-          totalRemainbudget.innerHTML = sum2;
-        }
-      });
-    });
+    // db.collection("env_subproject").get().then(querySnapshot => {
+    //   querySnapshot.forEach(docs => {
+    //     var budget = parseInt(docs.data().budget);
+    //     var budget_remain = parseInt(docs.data().budget_remain);
+    //     if (docs.data().isFinish == false) {
+    //       nums1 = nums1 + 1;
+    //       sum_envProject = sum_envProject + 1;
+    //       num_inprogress.innerHTML = nums1;
+    //       num_env.innerHTML = sum_envProject;
+    //     } else if (docs.data().isFinish == true) {
+    //       nums2 = nums2 + 1;
+    //       sum_envProject = sum_envProject + 1;
+    //       num_finished.innerHTML = nums2;
+    //       num_env.innerHTML = sum_envProject;
+    //     }
+    //     if (isNaN(budget)) {
+    //       budget = 0;
+    //       sum1 += budget;
+    //       totalBudget.innerHTML = sum1;         
+    //     } else {
+    //       sum1 += budget;
+    //       totalBudget.innerHTML = sum1;
+    //     }
+    //     if (isNaN(budget_remain)) {
+    //       budget_remain = 0;
+    //       sum2 += budget_remain;
+    //       totalRemainbudget.innerHTML = sum2;
+    //     } else {
+    //       sum2 += budget_remain;
+    //       totalRemainbudget.innerHTML = sum2;
+    //     }
+    //   });
+    // });
 
-    db.collection("che_subproject").get().then(querySnapshot => {
-      querySnapshot.forEach(docs => {
-        var budget = parseInt(docs.data().budget);
-        var budget_remain = parseInt(docs.data().budget_remain);
-        if (docs.data().isFinish == false) {
-          nums1 = nums1 + 1;
-          sum_cheProject = sum_cheProject + 1;
-          num_inprogress.innerHTML = nums1;
-          num_che.innerHTML = sum_cheProject;
-        } else if (docs.data().isFinish == true) {
-          nums2 = nums2 + 1;
-          sum_cheProject = sum_cheProject + 1;
-          num_finished.innerHTML = nums2;
-          num_che.innerHTML = sum_cheProject;
-        }
-        if (isNaN(budget)) {
-          budget = 0;
-          sum1 += budget;
-          totalBudget.innerHTML = sum1;         
-        } else {
-          sum1 += budget;
-          totalBudget.innerHTML = sum1;
-        }
-        if (isNaN(budget_remain)) {
-          budget_remain = 0;
-          sum2 += budget_remain;
-          totalRemainbudget.innerHTML = sum2;
-        } else {
-          sum2 += budget_remain;
-          totalRemainbudget.innerHTML = sum2;
-        }
-      });
-    });
+    // db.collection("che_subproject").get().then(querySnapshot => {
+    //   querySnapshot.forEach(docs => {
+    //     var budget = parseInt(docs.data().budget);
+    //     var budget_remain = parseInt(docs.data().budget_remain);
+    //     if (docs.data().isFinish == false) {
+    //       nums1 = nums1 + 1;
+    //       sum_cheProject = sum_cheProject + 1;
+    //       num_inprogress.innerHTML = nums1;
+    //       num_che.innerHTML = sum_cheProject;
+    //     } else if (docs.data().isFinish == true) {
+    //       nums2 = nums2 + 1;
+    //       sum_cheProject = sum_cheProject + 1;
+    //       num_finished.innerHTML = nums2;
+    //       num_che.innerHTML = sum_cheProject;
+    //     }
+    //     if (isNaN(budget)) {
+    //       budget = 0;
+    //       sum1 += budget;
+    //       totalBudget.innerHTML = sum1;         
+    //     } else {
+    //       sum1 += budget;
+    //       totalBudget.innerHTML = sum1;
+    //     }
+    //     if (isNaN(budget_remain)) {
+    //       budget_remain = 0;
+    //       sum2 += budget_remain;
+    //       totalRemainbudget.innerHTML = sum2;
+    //     } else {
+    //       sum2 += budget_remain;
+    //       totalRemainbudget.innerHTML = sum2;
+    //     }
+    //   });
+    // });
 
-    db.collection("coe_subproject").get().then(querySnapshot => {
-      querySnapshot.forEach(docs => {
-        var budget = parseInt(docs.data().budget);
-        var budget_remain = parseInt(docs.data().budget_remain);
-        if (docs.data().isFinish == false) {
-          nums1 = nums1 + 1;
-          sum_coeProject = sum_coeProject + 1;
-          num_inprogress.innerHTML = nums1;
-          num_coe.innerHTML = sum_coeProject;
-        } else if (docs.data().isFinish == true) {
-          nums2 = nums2 + 1;
-          sum_coeProject = sum_coeProject + 1;
-          num_finished.innerHTML = nums2;
-          num_coe.innerHTML = sum_coeProject;
-        }
-        if (isNaN(budget)) {
-          budget = 0;
-          sum1 += budget;
-          totalBudget.innerHTML = sum1;         
-        } else {
-          sum1 += budget;
-          totalBudget.innerHTML = sum1;
-        }
-        if (isNaN(budget_remain)) {
-          budget_remain = 0;
-          sum2 += budget_remain;
-          totalRemainbudget.innerHTML = sum2;
-        } else {
-          sum2 += budget_remain;
-          totalRemainbudget.innerHTML = sum2;
-        }
-      });
+    // db.collection("coe_subproject").get().then(querySnapshot => {
+    //   querySnapshot.forEach(docs => {
+    //     var budget = parseInt(docs.data().budget);
+    //     var budget_remain = parseInt(docs.data().budget_remain);
+    //     if (docs.data().isFinish == false) {
+    //       nums1 = nums1 + 1;
+    //       sum_coeProject = sum_coeProject + 1;
+    //       num_inprogress.innerHTML = nums1;
+    //       num_coe.innerHTML = sum_coeProject;
+    //     } else if (docs.data().isFinish == true) {
+    //       nums2 = nums2 + 1;
+    //       sum_coeProject = sum_coeProject + 1;
+    //       num_finished.innerHTML = nums2;
+    //       num_coe.innerHTML = sum_coeProject;
+    //     }
+    //     if (isNaN(budget)) {
+    //       budget = 0;
+    //       sum1 += budget;
+    //       totalBudget.innerHTML = sum1;         
+    //     } else {
+    //       sum1 += budget;
+    //       totalBudget.innerHTML = sum1;
+    //     }
+    //     if (isNaN(budget_remain)) {
+    //       budget_remain = 0;
+    //       sum2 += budget_remain;
+    //       totalRemainbudget.innerHTML = sum2;
+    //     } else {
+    //       sum2 += budget_remain;
+    //       totalRemainbudget.innerHTML = sum2;
+    //     }
+    //   });
       
-    });
+    // });
     
   
   },

@@ -137,222 +137,126 @@ export default {
     var nums16 = 0;
     var sum15 = 0;
     var sum16 = 0;
-                db.collection("ee_subproject").get().then(querySnapshot => {
+                db.collection("projects").get().then(querySnapshot => {
                     //  console.log(querySnapshot)
                     querySnapshot.forEach(docs => {
-                      // this.pp.push(doc.data())
-                      var budget = parseInt(docs.data().budget);
-                      var budget_remain = parseInt(docs.data().budget_remain);
-                      if (isNaN(budget)) {
-                        budget = 0;
-                        sum1 += budget;
-                      } else {
-                        sum1 += budget;
-                  
-                      }
-                      if (docs.data().isFinish == false) {
-                        nums1 = nums1 + 1;
-                      } else if (docs.data().isFinish == true) {
-                        nums2 = nums2 + 1;
-                      }
-                      if (isNaN(budget_remain)) {
-                        budget_remain = 0;
-                        sum2 += budget_remain;
-                      } else {
-                        sum2 += budget_remain;
-                      }
                       
+                      var deptID = docs.data().dept_id
+                      if(deptID == "0" || parseInt(deptID) == 0){
+                        var budget = parseInt(docs.data().budget_remain)
+                        var remain = parseInt(docs.data().disburse_remain)
+                        var finish = docs.data().isFinish
+                        sum1+=budget
+                        sum2+=remain
+                        if(finish == false){
+                          nums1+=1
+                        }else if(finish==true){
+                          nums2+=1
+                        }
+                      }
+                      else if(deptID == "1" || parseInt(deptID) == 1){
+                        var budget1 = parseInt(docs.data().budget_remain)
+                        var remain1 = parseInt(docs.data().disburse_remain)
+                        var finish1 = docs.data().isFinish
+                        sum3+=budget1
+                        sum4+=remain1
+                        if(finish1 == false){
+                          nums3+=1
+                        }else if(finish1==true){
+                          nums4+=1
+                        }
+                      }                      
+                       else if(deptID == "2" || parseInt(deptID) == 2){
+                        var budget2 = parseInt(docs.data().budget_remain)
+                        var remain2 = parseInt(docs.data().disburse_remain)
+                        var finish2 = docs.data().isFinish
+                        sum5+=budget2
+                        sum6+=remain2
+                        if(finish2 == false){
+                          nums5+=1
+                        }else if(finish2==true){
+                          nums6+=1
+                        }
+                      } 
+                       else if(deptID == "3" || parseInt(deptID) == 3){
+                        var budget3 = parseInt(docs.data().budget_remain)
+                        var remain3 = parseInt(docs.data().disburse_remain)
+                        var finish3 = docs.data().isFinish
+                        sum7+=budget3
+                        sum8+=remain3
+                        if(finish3 == false){
+                          nums7+=1
+                        }else if(finish2==true){
+                          nums8+=1
+                        }
+                      }
+                       else if(deptID == "4" || parseInt(deptID) == 4){
+                        var budget4 = parseInt(docs.data().budget_remain)
+                        var remain4 = parseInt(docs.data().disburse_remain)
+                        var finish4 = docs.data().isFinish
+                        sum9+=budget4
+                        sum10+=remain4
+                        if(finish4 == false){
+                          nums9+=1
+                        }else if(finish4==true){
+                          nums10+=1
+                        }
+                      }
+                       else if(deptID == "5" || parseInt(deptID) == 5){
+                        var budget5 = parseInt(docs.data().budget_remain)
+                        var remain5 = parseInt(docs.data().disburse_remain)
+                        var finish5 = docs.data().isFinish
+                        sum11+=budget5
+                        sum12+=remain5
+                        if(finish5 == false){
+                          nums11+=1
+                        }else if(finish5==true){
+                          nums12+=1
+                       }
+                      }
+                       else if(deptID == "6" || parseInt(deptID) == 6){
+                        var budget6 = parseInt(docs.data().budget_remain)
+                        var remain6 = parseInt(docs.data().disburse_remain)
+                        var finish6 = docs.data().isFinish
+                        sum13+=budget6
+                        sum14+=remain6
+                        if(finish6 == false){
+                          nums13+=1
+                        }else if(finish6==true){
+                          nums14+=1
+                        }
+                      } 
+                       else if(deptID == "7" || parseInt(deptID) == 7){
+                        var budget7 = parseInt(docs.data().budget_remain)
+                        var remain7 = parseInt(docs.data().disburse_remain)
+                        var finish7 = docs.data().isFinish
+                        sum15+=budget7
+                        sum16+=remain7
+                        if(finish7 == false){
+                          nums15+=1
+                        }else if(finish7==true){
+                          nums16+=1
+                        }
+                      }                    
                     });
                       this.items.unshift({tab:'ee project',proj_conss: nums1,pro_fh: nums2,amo: sum1,rem: sum2 })
-                      
-                      
-                });
-           db.collection("ce_subproject")
-                .get()
-                .then(querySnapshot => {
-                  querySnapshot.forEach(docs => {
-                    var budget = parseInt(docs.data().budget);
-                    var budget_remain = parseInt(docs.data().budget_remain);
-                    if (isNaN(budget)) {
-                      budget = 0;
-                      sum3 += budget;
-                    } else {
-                      sum3 += budget;
-                    }
-                    if (docs.data().isFinish == false) {
-                      nums3 = nums3 + 1;
-                    } else if (docs.data().isFinish == true) {
-                      nums4 = nums4 + 1;
-                    }
-                    if (isNaN(budget_remain)) {
-                      budget_remain = 0;
-                      sum4 += budget_remain;
-                    } else {
-                      sum4 += budget_remain;
-                    }
-                  });
                       this.items.unshift({tab: 'ce project',proj_conss: nums3,pro_fh: nums4,amo: sum3,rem: sum4 })
+                      this.items.unshift({tab: 'ae project',proj_conss: nums5,pro_fh: nums6,amo: sum5,rem: sum6 })
+                      this.items.unshift({tab: 'ie project',proj_conss: nums7,pro_fh: nums8,amo: sum7,rem: sum8 })
+                      this.items.unshift({tab: 'me project',proj_conss: nums9,pro_fh: nums10,amo: sum9,rem: sum10 })
+                      this.items.unshift({tab: 'env project',proj_conss: nums11,pro_fh: nums12,amo: sum11,rem: sum12 })                  
+                      this.items.unshift({tab: 'che project',proj_conss: nums13,pro_fh: nums14,amo: sum13,rem: sum14 })
+                      this.items.unshift({tab: 'coe project',proj_conss: nums15,pro_fh: nums16,amo: sum15,rem: sum16 })
+                      this.items.reverse();
+                    
                 });
-            db.collection("ae_subproject")
-                .get()
-                .then(querySnapshot => {
-                  querySnapshot.forEach(docs => {
-                    var budget = parseInt(docs.data().budget);
-                    var budget_remain = parseInt(docs.data().budget_remain);
-                    if (isNaN(budget)) {
-                      budget = 0;
-                      sum5 += budget;
-                    } else {
-                      sum5 += budget;
-                    }
-                    if (docs.data().isFinish == false) {
-                      nums5 = nums5 + 1;
-                    } else if (docs.data().isFinish == true) {
-                      nums6 = nums6 + 1;
-                    }
-                    if (isNaN(budget_remain)) {
-                      budget_remain = 0;
-                      sum6 += budget_remain;
-                    } else {
-                      sum6 += budget_remain;
-                    }
-                  });
-                  this.items.unshift({tab: 'ae project',proj_conss: nums5,pro_fh: nums6,amo: sum5,rem: sum6 })
-                });
-          db.collection("ie_subproject")
-                .get()
-                .then(querySnapshot => {
-                  querySnapshot.forEach(docs => {
-                    var budget = parseInt(docs.data().budget);
-                    var budget_remain = parseInt(docs.data().budget_remain);
-                    if (isNaN(budget)) {
-                      budget = 0;
-                      sum7 += budget;
-                    } else {
-                      sum7 += budget;
-                    }
-                    if (docs.data().isFinish == false) {
-                      nums7 = nums7 + 1;
-                    } else if (docs.data().isFinish == true) {
-                      nums8 = nums8 + 1;
-                    }
-                    if (isNaN(budget_remain)) {
-                      budget_remain = 0;
-                      sum8 += budget_remain;
-                    } else {
-                      sum8 += budget_remain;
-                    }
-                  });
-                 this.items.unshift({tab: 'ie project',proj_conss: nums7,pro_fh: nums8,amo: sum7,rem: sum8 })
-                });
-              db.collection("me_subproject")
-                .get()
-                .then(querySnapshot => {
-                  querySnapshot.forEach(docs => {
-                    var budget = parseInt(docs.data().budget);
-                    var budget_remain = parseInt(docs.data().budget_remain);
-                    if (isNaN(budget)) {
-                      budget = 0;
-                      sum9 += budget;
-                    } else {
-                      sum9 += budget;
-                    }
-                    if (docs.data().isFinish == false) {
-                      nums9 = nums9 + 1;
-                    } else if (docs.data().isFinish == true) {
-                      nums10 = nums10 + 1;
-                    }
-                    if (isNaN(budget_remain)) {
-                      budget_remain = 0;
-                      sum10 += budget_remain;
-                    } else {
-                      sum10 += budget_remain;
-                    }
-                  });
-                  this.items.unshift({tab: 'me project',proj_conss: nums9,pro_fh: nums10,amo: sum9,rem: sum10 })
-                });
-             db.collection("env_subproject")
-                .get()
-                .then(querySnapshot => {
-                  querySnapshot.forEach(docs => {
-                    var budget = parseInt(docs.data().budget);
-                    var budget_remain = parseInt(docs.data().budget_remain);
-                    if (isNaN(budget)) {
-                      budget = 0;
-                      sum11 += budget;
-                    } else {
-                      sum11 += budget;
-                    }
-                    if (docs.data().isFinish == false) {
-                      nums11 = nums11 + 1;
-                    } else if (docs.data().isFinish == true) {
-                      nums12 = nums12 + 1;
-                    }
-                    if (isNaN(budget_remain)) {
-                      budget_remain = 0;
-                      sum12 += budget_remain;
-                    } else {
-                      sum12 += budget_remain;
-                    }
-                  });this.items.unshift({tab: 'env project',proj_conss: nums11,pro_fh: nums12,amo: sum11,rem: sum12 })
-                });
-            db.collection("che_subproject")
-                .get()
-                .then(querySnapshot => {
-                  querySnapshot.forEach(docs => {
-                    var budget = parseInt(docs.data().budget);
-                    var budget_remain = parseInt(docs.data().budget_remain);
-                    if (isNaN(budget)) {
-                      budget = 0;
-                      sum13 += budget;
-                    } else {
-                      sum13 += budget;
-                    }
-                    if (docs.data().isFinish == false) {
-                      nums13 = nums13 + 1;
-                    } else if (docs.data().isFinish == true) {
-                      nums14 = nums14 + 1;
-                    }
-                    if (isNaN(budget_remain)) {
-                      budget_remain = 0;
-                      sum14 += budget_remain;
-                    } else {
-                      sum14 += budget_remain;
-                    }
-                  });
-                  this.items.unshift({tab: 'che project',proj_conss: nums13,pro_fh: nums14,amo: sum13,rem: sum14 })
-                });
-             db.collection("coe_subproject")
-                .get()
-                .then(querySnapshot => {
-                  querySnapshot.forEach(docs => {
-                    var budget = parseInt(docs.data().budget);
-                    var budget_remain = parseInt(docs.data().budget_remain);
-                    if (isNaN(budget)) {
-                      budget = 0;
-                      sum15 += budget;
-                    } else {
-                      sum15 += budget;
-                    }
-                    if (docs.data().isFinish == false) {
-                      nums15 = nums15 + 1;
-                    } else if (docs.data().isFinish == true) {
-                      nums16 = nums16 + 1;
-                    }
-                    if (isNaN(budget_remain)) {
-                      budget_remain = 0;
-                      sum16 += budget_remain;
-                    } else {
-                      sum16 += budget_remain;
-                    }
-                  });
-                  this.items.unshift({tab: 'coe project',proj_conss: nums15,pro_fh: nums16,amo: sum15,rem: sum16 })
-                   this.items.reverse();
-                });
+
+
+
+           
           
        
           },
-  methods: {}            
 };
 </script>
 
