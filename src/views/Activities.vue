@@ -1,61 +1,69 @@
 <template>
-  <v-card>
-    <v-toolbar
-      centered
-    >
-      <template v-slot:extension>
-        <v-tabs
-          v-model="tabs"
-          centered
-    fixed-tabs
-    background-color="indigo"
-    dark
-        >
-          <v-tab
-            v-for="historyTab in historyTabs"
-            :key="historyTab"
-          >
-            {{ historyTab }}
-          </v-tab>
-        </v-tabs>
-      </template>
-    </v-toolbar>
+  <v-sheet id="scrolling-techniques-5" class="overflow-y-auto" max-height="800">
+    <v-container style="height: 1500px;">
+              
+        <v-toolbar centered>
+          <v-card-title class="text-center justify-center py-6">
+            <h1 class="font-weight-bold headline">ประวัติการทำรายการ</h1>
+          </v-card-title>
+          <template v-slot:extension>
+            <v-tabs
+              v-model="tabs"
+              centered
+              fixed-tabs
+              background-color="transparent"
+              color="black"
+              slider-color="#c43926"
+              
+            >
+              <v-tab v-for="historyTab in historyTabs" :key="historyTab">
+                {{ historyTab }}
+              </v-tab>
+            </v-tabs>
+          </template>
+        </v-toolbar>
 
-    <v-tabs-items v-model="tabs">
-      <v-tab-item>
-        <v-card flat>
-          <v-data-table
-          :headers="addReduceHistory"
-          :items="actionActivities"></v-data-table>
-        </v-card>
-      </v-tab-item>
-      <v-tab-item>
-        <v-card flat>
-          <v-data-table
-          :headers="transectionHistory"
-          :items="transaction"></v-data-table>
-        </v-card>
-      </v-tab-item>
-      <v-tab-item>
-        <v-card flat>
-          <v-data-table
-          :headers="expenseHistory"
-          :items="expense"></v-data-table>
-        </v-card>
-      </v-tab-item>
-      <v-tab-item>
-        <v-card flat>
-          <v-data-table
-          :headers="disburseHistory"
-          :items="disburse"></v-data-table>
-        </v-card>
-      </v-tab-item>
-    </v-tabs-items>
-  </v-card>
+        <v-tabs-items v-model="tabs">
+          <v-tab-item>
+            <v-card flat>
+              <v-data-table
+                :headers="addReduceHistory"
+                :items="actionActivities"
+              ></v-data-table>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item>
+            <v-card flat>
+              <v-data-table
+                :headers="transectionHistory"
+                :items="transaction"
+              ></v-data-table>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item>
+            <v-card flat>
+              <v-data-table
+                :headers="expenseHistory"
+                :items="expense"
+              ></v-data-table>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item>
+            <v-card flat>
+              <v-data-table
+                :headers="disburseHistory"
+                :items="disburse"
+              ></v-data-table>
+            </v-card>
+          </v-tab-item>
+        </v-tabs-items>
+     
+     
+    </v-container>
+  </v-sheet>
 </template>
 
-<style>
-</style>
+<style></style>
 
 <script>
 import firebase from "firebase";
@@ -64,145 +72,185 @@ export default {
   data() {
     return {
       tabs: null,
-      historyTabs:[
-        'ประวัติการเพิ่มลดโครงการ', 'ประวัติการโอนย้ายงบประมาณ','ประวัติการขออนุมัติใช้','ประวัติการเบิกงบประมาณ'
+      historyTabs: [
+        "ประวัติการเพิ่มลดโครงการ",
+        "ประวัติการโอนย้ายงบประมาณ",
+        "ประวัติการขออนุมัติใช้",
+        "ประวัติการเบิกงบประมาณ"
       ],
-      addReduceHistory:[
-        {text:'วัน/เวลา', value: 'date', align: 'start'},
-        {text:'รายละเอียด', value: 'description'},
-        {text:'ผู้แก้ไข', value: 'user_name'},
-        {text:'', value: 'user_email'},
-        {text:'สาขาวิชา', value: 'user_department'}
-
+      addReduceHistory: [
+        { text: "วัน/เวลา", value: "date", align: "start" },
+        { text: "รายละเอียด", value: "description" },
+        { text: "ผู้แก้ไข", value: "user_name" },
+        { text: "", value: "user_email" },
+        { text: "สาขาวิชา", value: "user_department" }
       ],
-      transectionHistory:[
-
-        {text:'วัน/เวลา', value: 'date'},
-        {text:'รายละเอียด', value: 'details'},
-        {text:'ชนิดการโอน', value: 'pattern'},
-        {text:'โอนโดย', value: 'user_name'},
-        {text:'', value: 'user_email'},
-        {text:'สาขาวิชา', value: 'user_department'},
-        {text:'จำนวนงบประมาณ (บาท)', value: 'amount'},
+      transectionHistory: [
+        { text: "วัน/เวลา", value: "date" },
+        { text: "รายละเอียด", value: "details" },
+        { text: "ชนิดการโอน", value: "pattern" },
+        { text: "โอนโดย", value: "user_name" },
+        { text: "", value: "user_email" },
+        { text: "สาขาวิชา", value: "user_department" },
+        { text: "จำนวนงบประมาณ (บาท)", value: "amount" }
       ],
-        expenseHistory:[
-
-        {text:'วัน/เวลา', value: 'date'},
-        {text:'รายละเอียด',value: 'details'},
-        {text:'รายละเอียดการขออนุมัติ', value: 'description'},
-        {text:'ผู้ขออนุมัติใช้', value: 'user_name'},
-        {text:'', value: 'user_email'},
-        {text:'สาขาวิชา', value: 'user_department'},
+      expenseHistory: [
+        { text: "วัน/เวลา", value: "date" },
+        { text: "รายละเอียด", value: "details" },
+        { text: "รายละเอียดการขออนุมัติ", value: "description" },
+        { text: "ผู้ขออนุมัติใช้", value: "user_name" },
+        { text: "", value: "user_email" },
+        { text: "สาขาวิชา", value: "user_department" }
       ],
-        disburseHistory:[
-        {text:'วัน/เวลา', value: 'date'},
-        {text:'รายละเอียด',value: 'details'},
-        {text:'รายละเอียดการเบิกจ่าย', value: 'description'},
-        {text:'ผู้เบิกจ่าย', value: 'user_name'},
-        {text:'', value: 'user_email'},
-        {text:'สาขาวิชา', value: 'user_department'},
+      disburseHistory: [
+        { text: "วัน/เวลา", value: "date" },
+        { text: "รายละเอียด", value: "details" },
+        { text: "รายละเอียดการเบิกจ่าย", value: "description" },
+        { text: "ผู้เบิกจ่าย", value: "user_name" },
+        { text: "", value: "user_email" },
+        { text: "สาขาวิชา", value: "user_department" }
       ],
-      actionActivities:[],
-      transaction:[],
-      expense:[],
-      disburse:[],
-    }
+      actionActivities: [],
+      transaction: [],
+      expense: [],
+      disburse: []
+    };
   },
-  created(){
-    const vm = this
+  created() {
+    const vm = this;
 
-     db.collection("action_activities")
+    db.collection("action_activities")
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
-         if(doc.data().type == 'add'){
-                vm.actionActivities.push({
+          if (doc.data().type == "add") {
+            vm.actionActivities.push({
               ...doc.data(),
               date: doc.data().time.toDate(),
 
-              description: 'เพิ่มโครงการย่อย ' + doc.data().sub_name +" ภายใต้โครงการ" + doc.data().project_name
-                }
-              )              
-          }else{
-                vm.actionActivities.push({
+              description:
+                "เพิ่มโครงการย่อย " +
+                doc.data().sub_name +
+                " ภายใต้โครงการ" +
+                doc.data().project_name
+            });
+          } else {
+            vm.actionActivities.push({
               ...doc.data(),
               date: doc.data().time.toDate(),
 
-              description: 'ลบโครงการย่อย ' + doc.data().sub_name +" ภายใต้โครงการ" + doc.data().project_name
-                }
-              )
-          } 
+              description:
+                "ลบโครงการย่อย " +
+                doc.data().sub_name +
+                " ภายใต้โครงการ" +
+                doc.data().project_name
+            });
+          }
         });
       });
-     db.collection("old_transaction_activities")
+    db.collection("old_transaction_activities")
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
-         if(doc.data().type == 'oldMain'){
-                vm.transaction.push({
+          if (doc.data().type == "oldMain") {
+            vm.transaction.push({
               ...doc.data(),
               date: doc.data().time.toDate(),
-              pattern: 'การโอนระหว่างโครงการหลัก',
-              details: 'โอนเงินจาก' + doc.data().from_project+"ไปยัง"+ doc.data().to_project+"เป็นจำนวนเงิน" +doc.data().amount+ "บาท"
-                }
-              )              
-         }else if(doc.data().type == 'oldSub'){
-                vm.transaction.push({
+              pattern: "การโอนระหว่างโครงการหลัก",
+              details:
+                "โอนเงินจาก" +
+                doc.data().from_project +
+                "ไปยัง" +
+                doc.data().to_project +
+                "เป็นจำนวนเงิน" +
+                doc.data().amount +
+                "บาท"
+            });
+          } else if (doc.data().type == "oldSub") {
+            vm.transaction.push({
               ...doc.data(),
               date: doc.data().time.toDate(),
-              pattern: 'การโอนระหว่างโครงการย่อย (ภายใต้โครงการหลักเดียวกัน)',
-              details: 'โอนเงินจาก' + doc.data().from_project+"ไปยัง"+ doc.data().to_project+"เป็นจำนวนเงิน" +doc.data().amount+ "บาท"
-                }
-              )           
-         }
-         else if(doc.data().type == 'oldsubmain'){
-                vm.transaction.push({
+              pattern: "การโอนระหว่างโครงการย่อย (ภายใต้โครงการหลักเดียวกัน)",
+              details:
+                "โอนเงินจาก" +
+                doc.data().from_project +
+                "ไปยัง" +
+                doc.data().to_project +
+                "เป็นจำนวนเงิน" +
+                doc.data().amount +
+                "บาท"
+            });
+          } else if (doc.data().type == "oldsubmain") {
+            vm.transaction.push({
               ...doc.data(),
               date: doc.data().time.toDate(),
-              pattern: 'การโอนระหว่างโครงการหลักไปยังโครงการย่อย',
-              details: 'โอนเงินจาก' + doc.data().from_project+"ไปยัง"+ doc.data().to_project+"เป็นจำนวนเงิน" +doc.data().amount+ "บาท"
-                }
-              )           
-         }             
+              pattern: "การโอนระหว่างโครงการหลักไปยังโครงการย่อย",
+              details:
+                "โอนเงินจาก" +
+                doc.data().from_project +
+                "ไปยัง" +
+                doc.data().to_project +
+                "เป็นจำนวนเงิน" +
+                doc.data().amount +
+                "บาท"
+            });
+          }
         });
       });
     db.collection("sub_transaction_activities")
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
-         if(doc.data().type == 'expense'){
-                vm.expense.push({
+          if (doc.data().type == "expense") {
+            vm.expense.push({
               ...doc.data(),
               date: doc.data().time.toDate(),
 
-              details: 'ขออนุมัติเงินใช้จำนวน ' + doc.data().amount +"บาท ภายใต้โครงการ(ย่อย) " + doc.data().sub_name
-                }
-              )              
-          }else if(doc.data().type == 'expenseMain'){
-                vm.expense.push({
+              details:
+                "ขออนุมัติเงินใช้จำนวน " +
+                doc.data().amount +
+                "บาท ภายใต้โครงการ(ย่อย) " +
+                doc.data().sub_name
+            });
+          } else if (doc.data().type == "expenseMain") {
+            vm.expense.push({
               ...doc.data(),
               date: doc.data().time.toDate(),
-                
-              details: 'ขออนุมัติใช้เงินจำนวน ' + doc.data().amount +"บาท ภายใต้โครงการ(หลัก) " + doc.data().project_name
-                }
-              )
-          }else if(doc.data().type== 'disburse'){
-                vm.disburse.push({
+
+              details:
+                "ขออนุมัติใช้เงินจำนวน " +
+                doc.data().amount +
+                "บาท ภายใต้โครงการ(หลัก) " +
+                doc.data().project_name
+            });
+          } else if (doc.data().type == "disburse") {
+            vm.disburse.push({
               ...doc.data(),
               date: doc.data().time.toDate(),
-                
-              details: 'ขอเบิกจ่าย ' + doc.data().amount +"บาท ภายใต้โครงการ(ย่อย) " + doc.data().sub_name
-                })         
-          }else if(doc.data().type== 'disburseMain'){
-                vm.disburse.push({
+
+              details:
+                "ขอเบิกจ่าย " +
+                doc.data().amount +
+                "บาท ภายใต้โครงการ(ย่อย) " +
+                doc.data().sub_name
+            });
+          } else if (doc.data().type == "disburseMain") {
+            vm.disburse.push({
               ...doc.data(),
               date: doc.data().time.toDate(),
-                
-              details: 'ขอเบิกจ่าย ' + doc.data().amount +"บาท ภายใต้โครงการ(หลัก) " + doc.data().project_name
-                })       
-          }             
+
+              details:
+                "ขอเบิกจ่าย " +
+                doc.data().amount +
+                "บาท ภายใต้โครงการ(หลัก) " +
+                doc.data().project_name
+            });
+          }
         });
       });
-    }
+  }
 };
 </script>
+
+
+

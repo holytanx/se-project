@@ -43,7 +43,7 @@
       <template v-slot:img="{ props }">
         <v-img
           v-bind="props"
-          gradient="to top right, rgba(254,108,97,.6), rgba(196,57,38,.9)"
+          gradient="to top left, rgba(254,108,97,.6), rgba(196,57,38,1)"
         ></v-img>
       </template>
 
@@ -80,7 +80,7 @@
         <p class="mr-2" v-if="isLoggined">{{this.user}}<p> -->
 
         <span class="mr-2" v-if="isLoggined" v-on:click="logout"
-          >ออกจากระบบ <v-icon>mdi-account-alert</v-icon></span
+          >ออกจากระบบ <v-icon>mdi-power-settings</v-icon></span
         >
       </v-btn>
     </v-app-bar>
@@ -94,9 +94,10 @@
       :right="right"
       app
       dark
+      :src="bg"
     >
       <v-list dense nav class="py-0">
-        <v-list-item two-line :class="miniVariant && 'px-2'">
+        <v-list-item two-line :class="miniVariant && 'px-4'">
           <v-list-item-avatar>
             <img
               src="https://upload.wikimedia.org/wikipedia/th/a/a6/Engineering_KKU_Thai_Emblem.png"

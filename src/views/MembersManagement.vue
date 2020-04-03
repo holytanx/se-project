@@ -1,6 +1,16 @@
 <template>
   <v-sheet id="scrolling-techniques-5" class="overflow-y-auto" max-height="600">
     <v-container style="height: 1500px;">
+      <v-card class="mt-4 mx-auto" elevation="8">
+      <v-sheet
+            class="v-sheet--offset--member mx-auto"
+            color="#c43926"
+            elevation="8"
+            max-width="calc(100% - 90%)"
+            style="height: 90px;"
+          >
+            <v-icon large class="mt-6 mx-8" color="white">mdi-account-multiple-plus</v-icon>
+          </v-sheet>
       <v-data-table
         :headers="headers"
         :items="users"
@@ -9,7 +19,7 @@
       >
         <template v-slot:top>
           <v-toolbar flat color="white">
-            <v-toolbar-title>จัดการสมาชิก</v-toolbar-title>
+            <v-toolbar-title class="headline font-weight-bold">จัดการสมาชิก</v-toolbar-title>
             <v-divider class="mx-4" inset vertical></v-divider>
             <v-spacer></v-spacer>
             <v-dialog v-model="edit_dialog" max-width="600px">
@@ -66,7 +76,7 @@
             </v-dialog>
             <v-dialog v-model="dialog" max-width="600px">
               <template v-slot:activator="{ on }">
-                <v-btn color="success" dark class="mb-2" v-on="on"
+                <v-btn  color="#c43926" outlined dark rounded class="mb-2" v-on="on"
                   >เพิ่มสมาชิก</v-btn
                 >
               </template>
@@ -144,8 +154,10 @@
           <!-- <v-btn color="primary" @click="initialize">Reset</v-btn> -->
         </template>
       </v-data-table>
+      </v-card>
     </v-container>
   </v-sheet>
+
 </template>
 <script>
 import firebase from "firebase";
@@ -310,3 +322,11 @@ export default {
   }
 };
 </script>
+
+<style>
+.v-sheet--offset--member {
+  top: -20px;
+  right: 480px;
+  position: relative;
+}
+</style>

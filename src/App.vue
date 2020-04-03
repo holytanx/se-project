@@ -19,9 +19,11 @@ export default {
   components: {
     Navbar
   },
+  
 
   data: () => ({
     
   }),
 };
 </script>
+

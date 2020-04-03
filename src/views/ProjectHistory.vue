@@ -2,52 +2,81 @@
   <v-sheet id="scrolling-techniques-5" class="overflow-y-auto" max-height="800">
     <v-container style="height: 1500px;">
       <v-container>
-        <br />
-        <br />
-        <h5>ประวัติโครงการย้อนหลัง</h5>
-        <br />
-        <br />
+        <v-card class="mt-4 mx-auto" elevation="8">
+          <v-sheet
+            class="v-sheet--offset--history mx-auto"
+            color="red lighten-2"
+            elevation="10"
+            max-width="calc(100% - 94%)"
+            style="height: 60px;"
+          >
+            <v-icon class="mt-4 mx-5" color="white">mdi-file-document</v-icon>
+          </v-sheet>
+          <v-row>
+            <v-col cols="8">
+              <v-card-title class="headline font-weight-bold"
+                >ประวัติโครงการย้อนหลัง</v-card-title
+              >
+            </v-col>
+            <v-col>
+              <v-select
+                v-model="enabled"
+                :items="years"
+                label="เลือกปีการศึกษา"
+                clearable
+              ></v-select>
+            </v-col>
+          </v-row>
+          <v-data-table
+            :headers="headers"
+            :items="items"
+            :search="search"
+            item-key="name"
+            class="elevation-1"
+          >
+            <template v-slot:item.deptname="{ item }">
+              <v-chip :color="getColor(item.deptname)" dark>{{
+                item.deptname
+              }}</v-chip>
+            </template>
+          </v-data-table>
+        </v-card>
 
-        <v-select
-          v-model="enabled"
-          :items="years"
-          label="เลือกปีการศึกษา"
-          clearable
-        ></v-select>
-        <v-data-table
-          :headers="headers"
-          :items="items"
-          :search="search"
-          item-key="name"
-          class="elevation-1"
-        >
-          <template v-slot:item.deptname="{ item }">
-            <v-chip :color="getColor(item.deptname)" dark>{{
-              item.deptname
-            }}</v-chip>
-          </template>
-        </v-data-table>
         <br />
         <br />
-        <v-data-table
-          :headers="headers"
-          :items="finish_projects"
-          :single-expand="singleExpand"
-          item-key="name"
-          class="elevation-1"
-        >
-          <template v-slot:item.deptname="{ item }">
-            <v-chip :color="getColor(item.deptname)" dark>{{
-              item.deptname
-            }}</v-chip>
-          </template>
-          <template v-slot:top>
-            <v-toolbar flat>
-              <v-toolbar-title>โครงการย้อนหลังทั้งหมด</v-toolbar-title>
-              <v-spacer></v-spacer>
-            </v-toolbar>
-          </template>
-        </v-data-table>
+        <v-card class="mt-4 mx-auto" elevation="8">
+          <v-sheet
+            class="v-sheet--offset--history mx-auto"
+            color="red lighten-2"
+            elevation="8"
+            max-width="calc(100% - 94%)"
+            style="height: 60px;"
+          >
+            <v-icon class="mt-4 mx-5" color="white">mdi-file-cloud</v-icon>
+          </v-sheet>
+          <v-data-table
+            :headers="headers"
+            :items="finish_projects"
+            :single-expand="singleExpand"
+            item-key="name"
+            class="elevation-1"
+          >
+            <template v-slot:item.deptname="{ item }">
+              <v-chip :color="getColor(item.deptname)" dark>{{
+                item.deptname
+              }}</v-chip>
+            </template>
+
+            <template v-slot:top>
+              <v-toolbar flat>
+                <v-toolbar-title class="headline font-weight-bold"
+                  >โครงการย้อนหลังทั้งหมด</v-toolbar-title
+                >
+                <v-spacer></v-spacer>
+              </v-toolbar>
+            </template>
+          </v-data-table>
+        </v-card>
       </v-container>
     </v-container>
   </v-sheet>
@@ -101,9 +130,7 @@ export default {
     }
   },
 
-  mounted() {
-
-  },
+  mounted() {},
 
   watch: {
     enabled() {
@@ -189,3 +216,11 @@ export default {
   }
 };
 </script>
+
+<style>
+.v-sheet--offset--history {
+  top: -14px;
+  right: 490px;
+  position: relative;
+}
+</style>

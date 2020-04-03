@@ -1,17 +1,17 @@
 <template>
   <v-sheet id="scrolling-techniques-5" class="overflow-y-auto" max-height="600">
     <v-container style="height: 1500px;">
-    <v-container class="grey lighten-5" >
+    <v-container  >
       <div class="row justify-center">
         <div class="col-auto">
           <v-dialog v-model="dialog_add_si" persistent max-width="600px">
             <template v-slot:activator="{ on }">
-              <v-btn color="success" dark v-on="on"
+              <v-btn elevation="6" rounded outlined color="success" dark v-on="on"
                 >เพิ่มประเด็นยุทธ์ศาสตร์
                 <v-icon right dark>mdi-cloud-upload</v-icon>
               </v-btn>
             </template>
-            <v-card>
+            <v-card >
               <v-card-title>
                 <span class="headline">เพิ่มประเด็นยุทธ์ศาสตร์</span>
               </v-card-title>
@@ -40,7 +40,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="error" text @click="dialog_add_si = false"
+                <v-btn  color="error" text @click="dialog_add_si = false"
                   >ยกเลิก</v-btn
                 >
                 <v-btn color="success" text @click="add_si">เพิ่ม</v-btn>
@@ -85,14 +85,14 @@
         <div class="col-auto">
           <v-dialog v-model="dialog_add_s" persistent max-width="600px">
             <template v-slot:activator="{ on }">
-              <v-btn color="warning" dark v-on="on"
+              <v-btn elevation="6" outlined rounded color="warning" dark v-on="on"
                 >เพิ่มยุทธ์ศาสตร์
                 <v-icon right dark>mdi-cloud-upload</v-icon>
               </v-btn>
             </template>
             <v-card>
               <v-card-title>
-                <span class="headline">เพิ่มยุทธ์ศาสตร์</span>
+                <span  class="headline">เพิ่มยุทธ์ศาสตร์</span>
               </v-card-title>
               <v-card-text>
                 <v-container>
@@ -164,7 +164,7 @@
         <div class="col-auto">
           <v-dialog v-model="dialog_add_t" persistent max-width="600px">
             <template v-slot:activator="{ on }">
-              <v-btn color="error" dark v-on="on"
+              <v-btn elevation="6" outlined rounded color="error" dark v-on="on"
                 >เพิ่มกลยุทธ์
                 <v-icon right dark>mdi-cloud-upload</v-icon>
               </v-btn>
@@ -247,11 +247,11 @@
             :headers="si_headers"
             :items="strategicissues"
             dense
-            class="elevation-2"
+            class="elevation-6"
           >
             <template v-slot:top>
               <v-toolbar flat color="white">
-                <v-toolbar-title>ประเด็นยุทธ์ศาสตร์</v-toolbar-title>
+                <v-toolbar-title class="headline font-weight-bold">ประเด็นยุทธ์ศาสตร์</v-toolbar-title>
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-spacer></v-spacer>
               </v-toolbar>
@@ -275,11 +275,11 @@
             :headers="s_headers"
             :items="strategic"
             dense
-            class="elevation-2"
+            class="elevation-6"
           >
             <template v-slot:top>
               <v-toolbar flat color="white">
-                <v-toolbar-title>ยุทธ์ศาสตร์</v-toolbar-title>
+                <v-toolbar-title class="headline font-weight-bold">ยุทธ์ศาสตร์</v-toolbar-title>
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-spacer></v-spacer>
               </v-toolbar>
@@ -302,11 +302,11 @@
             :headers="t_headers"
             :items="tactics"
             dense
-            class="elevation-2"
+            class="elevation-6"
           >
             <template v-slot:top>
               <v-toolbar flat color="white">
-                <v-toolbar-title>กลยุทธ์</v-toolbar-title>
+                <v-toolbar-title class="title font-weight-bold">กลยุทธ์</v-toolbar-title>
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-spacer></v-spacer>
               </v-toolbar>

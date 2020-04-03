@@ -1,7 +1,7 @@
 <template>
   <v-card class="mt-4 mx-auto" max-width="460">
     <v-sheet
-      class="v-sheet--offset mx-auto"
+      class="v-sheet--offset--login mx-auto"
       color="#c43926"
       elevation="6"
       max-width="calc(100% - 80%)"
@@ -9,7 +9,7 @@
     >
       <v-icon class="mt-7 mx-7" large color="white">mdi-account</v-icon>
     </v-sheet>
-    <div class="title font-weight-bold">User Registration</div>
+    <div class="title font-weight-bold">User Login</div>
 
     <v-container fluid>
       <v-row justify="space-around">
@@ -72,7 +72,7 @@ export default {
 
 <style lang="scss" scoped></style>
 <style>
-.v-sheet--offset {
+.v-sheet--offset--login {
   top: 30px;
   right: 230px;
   position: relative;
