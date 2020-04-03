@@ -1,8 +1,12 @@
 <template>
-  <v-container>
+  <v-sheet id="scrolling-techniques-5" class="overflow-y-auto" max-height="800">
+
+  <v-container style="height: 1500px;">
     <v-tabs
       v-model="tab"
-      background-color="primary"
+      background-color="transparent"
+      color="teal"
+      slider-color="teal darken-3"
       >
       <v-tab
         v-for="item in items"
@@ -88,6 +92,7 @@
       </v-layout>
     </div>
   </v-container>
+  </v-sheet>
 </template> 
 
 <script>

@@ -241,11 +241,7 @@ export default {
           icon: "mdi-account",
           link: "/sumeachyear"
         },
-        {
-          title: "ตรวจสอบโครงการที่กำลังดำเนินการ",
-          icon: "mdi-timer-sand",
-          link: "/"
-        }
+        
       ],
       regular_items: [
         {
